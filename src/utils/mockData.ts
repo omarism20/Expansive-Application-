@@ -1,4 +1,3 @@
-
 import { Transaction, Category, Budget, SummaryData } from '../types';
 
 // Mock Categories
@@ -157,4 +156,16 @@ export const getIncomeVsExpensesByMonth = () => {
     { month: 'Mar', income: 3700, expenses: 1850 },
     { month: 'Apr', income: 3800, expenses: 1796.25 }
   ];
+};
+
+/**
+ * Calculate total expenses for today
+ * @param transactions - array of transactions
+ * @returns total expenses for today
+ */
+export const getTodayExpenses = (transactions: Transaction[]): number => {
+  const today = new Date().toISOString().split('T')[0];
+  return transactions
+    .filter(tx => tx.type === 'expense' && tx.date === today)
+    .reduce((sum, tx) => sum + tx.amount, 0);
 };

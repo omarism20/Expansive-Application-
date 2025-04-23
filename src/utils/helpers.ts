@@ -1,3 +1,6 @@
+
+import { Transaction } from '../types';
+
 /**
  * Format amount as currency
  * @param amount - numeric amount to format
