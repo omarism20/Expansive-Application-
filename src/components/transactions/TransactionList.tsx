@@ -17,18 +17,20 @@ import {
   SelectValue 
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowUpDown, ChevronDown, Circle } from "lucide-react";
+import { Edit, Search, ArrowUpDown, Circle } from "lucide-react";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { Transaction } from "@/types";
 import { mockCategories } from "@/utils/mockData";
 
 interface TransactionListProps {
   transactions: Transaction[];
+  onEdit?: (transaction: Transaction) => void;
 }
 
-export function TransactionList({ transactions }: TransactionListProps) {
+export function TransactionList({ transactions, onEdit }: TransactionListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
+  const [filterCategory, setFilterCategory] = useState("all");
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Transaction;
     direction: "asc" | "desc";
@@ -46,8 +48,12 @@ export function TransactionList({ transactions }: TransactionListProps) {
     const matchesType =
       filterType === "all" ||
       transaction.type === filterType;
+
+    const matchesCategory =
+      filterCategory === "all" ||
+      transaction.category === filterCategory;
       
-    return matchesSearch && matchesType;
+    return matchesSearch && matchesType && matchesCategory;
   });
 
   // Sort transactions
@@ -96,6 +102,25 @@ export function TransactionList({ transactions }: TransactionListProps) {
               <SelectItem value="expense">Expense</SelectItem>
             </SelectContent>
           </Select>
+          <Select value={filterCategory} onValueChange={setFilterCategory}>
+            <SelectTrigger className="w-[150px]">
+              <SelectValue placeholder="All Categories" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {mockCategories.map((category) => (
+                <SelectItem key={category.id} value={category.id}>
+                  <div className="flex items-center">
+                    <div
+                      className="w-2 h-2 rounded-full mr-2"
+                      style={{ backgroundColor: category.color }}
+                    />
+                    {category.name}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -138,6 +163,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
                   <ArrowUpDown className="ml-2 h-3 w-3" />
                 </Button>
               </TableHead>
+              <TableHead className="w-[50px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -168,17 +194,30 @@ export function TransactionList({ transactions }: TransactionListProps) {
                     </TableCell>
                     <TableCell>{formatDate(transaction.date)}</TableCell>
                     <TableCell className={`text-right font-medium ${
-                      transaction.type === "income" ? "text-green-600" : "text-finance-orange"
+                      transaction.type === "income" ? "text-green-600" : "text-orange-500"
                     }`}>
                       {transaction.type === "income" ? "+" : "-"}
                       {formatCurrency(transaction.amount)}
+                    </TableCell>
+                    <TableCell>
+                      {onEdit && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => onEdit(transaction)}
+                          className="h-8 w-8"
+                        >
+                          <Edit className="h-4 w-4" />
+                          <span className="sr-only">Edit</span>
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8">
+                <TableCell colSpan={6} className="text-center py-8">
                   <div className="text-muted-foreground">No transactions found</div>
                 </TableCell>
               </TableRow>
