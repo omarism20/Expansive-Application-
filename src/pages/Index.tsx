@@ -9,6 +9,7 @@ import { TransactionList } from "@/components/transactions/TransactionList";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { BudgetForm } from "@/components/budget/BudgetForm";
 import Header from "@/components/layout/Header";
+import { Budget } from "@/types";
 import { 
   mockTransactions, 
   mockBudgets, 
@@ -59,7 +60,6 @@ export default function Index() {
           </Button>
         </div>
 
-        {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <SummaryCard
             title="Total Balance"
@@ -97,13 +97,11 @@ export default function Index() {
           />
         </div>
 
-        {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <ExpenseChart data={expensesData} />
           <IncomeExpenseChart data={incomeVsExpensesData} />
         </div>
 
-        {/* Budget Tracking */}
         <div className="mb-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-semibold">Budget Tracking</h3>
@@ -132,7 +130,6 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Recent Transactions */}
         <div>
           <h3 className="text-xl font-semibold mb-4">Recent Transactions</h3>
           <TransactionList transactions={mockTransactions.slice(0, 5)} />
@@ -142,14 +139,12 @@ export default function Index() {
         </div>
       </main>
 
-      {/* Transaction Form Dialog */}
       <TransactionForm
         open={isTransactionFormOpen}
         onClose={() => setIsTransactionFormOpen(false)}
         onSubmit={handleAddTransaction}
       />
       
-      {/* Budget Form Dialog */}
       <BudgetForm
         open={isBudgetFormOpen}
         onClose={() => {
