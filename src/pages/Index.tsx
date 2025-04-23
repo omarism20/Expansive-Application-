@@ -7,6 +7,7 @@ import { IncomeExpenseChart } from "@/components/dashboard/IncomeExpenseChart";
 import { BudgetProgressCard } from "@/components/budget/BudgetProgressCard";
 import { TransactionList } from "@/components/transactions/TransactionList";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
+import { BudgetForm } from "@/components/budget/BudgetForm";
 import Header from "@/components/layout/Header";
 import { 
   mockTransactions, 
@@ -20,6 +21,8 @@ import { formatCurrency } from "@/utils/helpers";
 
 export default function Index() {
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
+  const [isBudgetFormOpen, setIsBudgetFormOpen] = useState(false);
+  const [selectedBudget, setSelectedBudget] = useState<Budget | undefined>();
   
   const expensesData = getMonthlySpendingByCategory();
   const incomeVsExpensesData = getIncomeVsExpensesByMonth();
@@ -27,9 +30,17 @@ export default function Index() {
   const remainingMonthlyBudget = mockSummaryData.totalIncome - mockSummaryData.totalExpenses;
   
   const handleAddTransaction = (data: any) => {
-    // In a real app, this would add the transaction to the database
     console.log("Adding transaction:", data);
-    // Then update the UI accordingly
+  };
+
+  const handleEditBudget = (budget: Budget) => {
+    setSelectedBudget(budget);
+    setIsBudgetFormOpen(true);
+  };
+
+  const handleUpdateBudget = (updatedBudget: Budget) => {
+    console.log("Updating budget:", updatedBudget);
+    setSelectedBudget(undefined);
   };
 
   return (
@@ -94,10 +105,26 @@ export default function Index() {
 
         {/* Budget Tracking */}
         <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-4">Budget Tracking</h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-semibold">Budget Tracking</h3>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                setSelectedBudget(undefined);
+                setIsBudgetFormOpen(true);
+              }}
+            >
+              Add Budget
+            </Button>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {mockBudgets.slice(0, 3).map((budget) => (
-              <BudgetProgressCard key={budget.id} budget={budget} />
+              <BudgetProgressCard 
+                key={budget.id} 
+                budget={budget}
+                onEdit={handleEditBudget}
+              />
             ))}
           </div>
           <div className="flex justify-end mt-4">
@@ -120,6 +147,17 @@ export default function Index() {
         open={isTransactionFormOpen}
         onClose={() => setIsTransactionFormOpen(false)}
         onSubmit={handleAddTransaction}
+      />
+      
+      {/* Budget Form Dialog */}
+      <BudgetForm
+        open={isBudgetFormOpen}
+        onClose={() => {
+          setIsBudgetFormOpen(false);
+          setSelectedBudget(undefined);
+        }}
+        onSubmit={handleUpdateBudget}
+        initialData={selectedBudget}
       />
     </div>
   );
