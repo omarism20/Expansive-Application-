@@ -1,14 +1,118 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import { useState } from "react";
+import { PlusCircle, DollarSign, TrendingUp, Wallet, Landmark } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { SummaryCard } from "@/components/dashboard/SummaryCard";
+import { ExpenseChart } from "@/components/dashboard/ExpenseChart";
+import { IncomeExpenseChart } from "@/components/dashboard/IncomeExpenseChart";
+import { BudgetProgressCard } from "@/components/budget/BudgetProgressCard";
+import { TransactionList } from "@/components/transactions/TransactionList";
+import { TransactionForm } from "@/components/transactions/TransactionForm";
+import Header from "@/components/layout/Header";
+import { 
+  mockTransactions, 
+  mockBudgets, 
+  mockSummaryData,
+  getMonthlySpendingByCategory,
+  getIncomeVsExpensesByMonth
+} from "@/utils/mockData";
+import { formatCurrency } from "@/utils/helpers";
+
+export default function Index() {
+  const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
+  
+  const expensesData = getMonthlySpendingByCategory();
+  const incomeVsExpensesData = getIncomeVsExpensesByMonth();
+  
+  const handleAddTransaction = (data: any) => {
+    // In a real app, this would add the transaction to the database
+    console.log("Adding transaction:", data);
+    // Then update the UI accordingly
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
+      <main className="container py-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold">Dashboard</h2>
+          <Button 
+            onClick={() => setIsTransactionFormOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <PlusCircle size={18} />
+            Add Transaction
+          </Button>
+        </div>
+
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <SummaryCard
+            title="Total Balance"
+            value={formatCurrency(mockSummaryData.balance)}
+            description="Current balance across all accounts"
+            icon={Wallet}
+            trend={{ value: "+5.2%", positive: true }}
+          />
+          <SummaryCard
+            title="Monthly Income"
+            value={formatCurrency(mockSummaryData.totalIncome)}
+            description="Total income this month"
+            icon={TrendingUp}
+            trend={{ value: "+2.1%", positive: true }}
+          />
+          <SummaryCard
+            title="Monthly Expenses"
+            value={formatCurrency(mockSummaryData.totalExpenses)}
+            description="Total spent this month"
+            icon={DollarSign}
+            trend={{ value: "-1.4%", positive: true }}
+          />
+          <SummaryCard
+            title="Savings Rate"
+            value={`${mockSummaryData.savingsRate.toFixed(1)}%`}
+            description="Of your income saved"
+            icon={Landmark}
+            trend={{ value: "+3.8%", positive: true }}
+          />
+        </div>
+
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <ExpenseChart data={expensesData} />
+          <IncomeExpenseChart data={incomeVsExpensesData} />
+        </div>
+
+        {/* Budget Tracking */}
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold mb-4">Budget Tracking</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {mockBudgets.slice(0, 3).map((budget) => (
+              <BudgetProgressCard key={budget.id} budget={budget} />
+            ))}
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button variant="outline" size="sm">View All Budgets</Button>
+          </div>
+        </div>
+
+        {/* Recent Transactions */}
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Recent Transactions</h3>
+          <TransactionList transactions={mockTransactions.slice(0, 5)} />
+          <div className="flex justify-end mt-4">
+            <Button variant="outline" size="sm">View All Transactions</Button>
+          </div>
+        </div>
+      </main>
+
+      {/* Transaction Form Dialog */}
+      <TransactionForm
+        open={isTransactionFormOpen}
+        onClose={() => setIsTransactionFormOpen(false)}
+        onSubmit={handleAddTransaction}
+      />
     </div>
   );
-};
-
-export default Index;
+}

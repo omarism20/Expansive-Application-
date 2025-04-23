@@ -19,6 +19,17 @@ export default {
 		},
 		extend: {
 			colors: {
+				// Finance app specific colors
+				finance: {
+					purple: '#8B5CF6',
+					'light-purple': '#E5DEFF',
+					blue: '#0EA5E9',
+					'light-blue': '#D3E4FD',
+					orange: '#F97316',
+					'dark-gray': '#1A1F2C',
+					'neutral-gray': '#8E9196',
+					'light-gray': '#D6BCFA',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
