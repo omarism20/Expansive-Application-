@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { PlusCircle, DollarSign, TrendingUp, Wallet, Landmark } from "lucide-react";
+import { PlusCircle, DollarSign, TrendingUp, Wallet, Landmark, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SummaryCard } from "@/components/dashboard/SummaryCard";
 import { ExpenseChart } from "@/components/dashboard/ExpenseChart";
@@ -14,7 +13,8 @@ import {
   mockBudgets, 
   mockSummaryData,
   getMonthlySpendingByCategory,
-  getIncomeVsExpensesByMonth
+  getIncomeVsExpensesByMonth,
+  getTodayExpenses
 } from "@/utils/mockData";
 import { formatCurrency } from "@/utils/helpers";
 
@@ -23,6 +23,8 @@ export default function Index() {
   
   const expensesData = getMonthlySpendingByCategory();
   const incomeVsExpensesData = getIncomeVsExpensesByMonth();
+  const todayExpenses = getTodayExpenses(mockTransactions);
+  const remainingMonthlyBudget = mockSummaryData.totalIncome - mockSummaryData.totalExpenses;
   
   const handleAddTransaction = (data: any) => {
     // In a real app, this would add the transaction to the database
@@ -56,18 +58,24 @@ export default function Index() {
             trend={{ value: "+5.2%", positive: true }}
           />
           <SummaryCard
-            title="Monthly Income"
-            value={formatCurrency(mockSummaryData.totalIncome)}
-            description="Total income this month"
+            title="Monthly Budget Left"
+            value={formatCurrency(remainingMonthlyBudget)}
+            description="Remaining budget this month"
             icon={TrendingUp}
-            trend={{ value: "+2.1%", positive: true }}
+            trend={{ 
+              value: `${((remainingMonthlyBudget / mockSummaryData.totalIncome) * 100).toFixed(1)}%`, 
+              positive: remainingMonthlyBudget > 0 
+            }}
           />
           <SummaryCard
-            title="Monthly Expenses"
-            value={formatCurrency(mockSummaryData.totalExpenses)}
-            description="Total spent this month"
-            icon={DollarSign}
-            trend={{ value: "-1.4%", positive: true }}
+            title="Today's Expenses"
+            value={formatCurrency(todayExpenses)}
+            description="Total spent today"
+            icon={Clock}
+            trend={{ 
+              value: todayExpenses === 0 ? "No expenses" : "Today", 
+              positive: true 
+            }}
           />
           <SummaryCard
             title="Savings Rate"

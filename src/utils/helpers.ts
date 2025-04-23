@@ -1,4 +1,3 @@
-
 /**
  * Format amount as currency
  * @param amount - numeric amount to format
@@ -67,4 +66,16 @@ export const getDifference = (current: number, previous: number): string => {
   const diff = ((current - previous) / previous) * 100;
   const prefix = diff > 0 ? '+' : '';
   return `${prefix}${diff.toFixed(1)}%`;
+};
+
+/**
+ * Calculate total expenses for today
+ * @param transactions - array of transactions
+ * @returns total expenses for today
+ */
+export const getTodayExpenses = (transactions: Transaction[]): number => {
+  const today = new Date().toISOString().split('T')[0];
+  return transactions
+    .filter(tx => tx.type === 'expense' && tx.date === today)
+    .reduce((sum, tx) => sum + tx.amount, 0);
 };
