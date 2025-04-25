@@ -1,4 +1,4 @@
-import { Transaction, Category, Budget, SummaryData } from '../types';
+import { Transaction, Category, Budget, SummaryData, SavingGoal } from '../types';
 
 // Mock Categories
 export const mockCategories: Category[] = [
@@ -111,6 +111,27 @@ export const mockSummaryData: SummaryData = {
     { category: 'cat4', amount: 120, percentage: 6.68 },
   ]
 };
+
+// Mock Saving Goals
+export const mockSavingGoals: SavingGoal[] = [
+  {
+    id: "1",
+    name: "New Laptop",
+    targetAmount: 1500,
+    currentAmount: 750,
+    deadline: "2024-08-01",
+    autoContribute: true,
+    contributionAmount: 200,
+    contributionInterval: "monthly"
+  },
+  {
+    id: "2",
+    name: "Emergency Fund",
+    targetAmount: 5000,
+    currentAmount: 2500,
+    autoContribute: false
+  }
+];
 
 // Helper function to get a category by ID
 export const getCategoryById = (id: string): Category | undefined => {

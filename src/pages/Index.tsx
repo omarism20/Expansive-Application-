@@ -20,9 +20,11 @@ import {
   getMonthlySpendingByCategory,
   getIncomeVsExpensesByMonth,
   getTodayExpenses,
-  getDailySpending
+  getDailySpending,
+  mockSavingGoals
 } from "@/utils/mockData";
 import { formatCurrency } from "@/utils/helpers";
+import { SavingGoalsList } from "@/components/savings/SavingGoalsList";
 
 const mockRecurringTransactions: RecurringTransaction[] = [
   {
@@ -76,6 +78,10 @@ export default function Index() {
 
   const handleToggleRecurring = (id: string) => {
     console.log("Toggle recurring transaction:", id);
+  };
+  
+  const handleAddSavingGoal = () => {
+    console.log("Add saving goal clicked");
   };
 
   return (
@@ -141,10 +147,14 @@ export default function Index() {
           <TransactionCalendar transactions={mockTransactions} />
         </div>
 
-        <div className="mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <RecurringTransactionList 
             transactions={mockRecurringTransactions}
             onToggle={handleToggleRecurring}
+          />
+          <SavingGoalsList 
+            goals={mockSavingGoals} 
+            onAddClick={handleAddSavingGoal}
           />
         </div>
 

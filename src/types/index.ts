@@ -52,3 +52,14 @@ export interface SummaryData {
     percentage: number;
   }[];
 }
+
+export interface SavingGoal {
+  id: string;
+  name: string;
+  targetAmount: number;
+  currentAmount: number;
+  deadline?: string;
+  autoContribute: boolean;
+  contributionAmount?: number;
+  contributionInterval?: RecurrenceInterval;
+}
