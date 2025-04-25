@@ -1,4 +1,3 @@
-
 // Type definitions for the finance tracker app
 
 export type TransactionType = 'income' | 'expense';
@@ -26,6 +25,20 @@ export interface Budget {
   amount: number;
   spent: number;
   period: 'monthly' | 'weekly' | 'yearly';
+}
+
+export type RecurrenceInterval = 'daily' | 'weekly' | 'monthly' | 'yearly';
+
+export interface RecurringTransaction {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  type: TransactionType;
+  interval: RecurrenceInterval;
+  startDate: string;
+  lastProcessed: string;
+  isActive: boolean;
 }
 
 export interface SummaryData {

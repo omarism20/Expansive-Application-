@@ -10,8 +10,9 @@ import { BudgetProgressCard } from "@/components/budget/BudgetProgressCard";
 import { TransactionList } from "@/components/transactions/TransactionList";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
 import { BudgetForm } from "@/components/budget/BudgetForm";
+import { RecurringTransactionList } from "@/components/recurring/RecurringTransactionList";
 import Header from "@/components/layout/Header";
-import { Budget } from "@/types";
+import { Budget, RecurringTransaction } from "@/types";
 import { 
   mockTransactions, 
   mockBudgets, 
@@ -22,6 +23,31 @@ import {
   getDailySpending
 } from "@/utils/mockData";
 import { formatCurrency } from "@/utils/helpers";
+
+const mockRecurringTransactions: RecurringTransaction[] = [
+  {
+    id: "1",
+    description: "Rent Payment",
+    amount: 1200,
+    category: "housing",
+    type: "expense",
+    interval: "monthly",
+    startDate: "2024-01-01",
+    lastProcessed: "2024-03-01",
+    isActive: true
+  },
+  {
+    id: "2",
+    description: "Salary",
+    amount: 5000,
+    category: "income",
+    type: "income",
+    interval: "monthly",
+    startDate: "2024-01-01",
+    lastProcessed: "2024-03-01",
+    isActive: true
+  }
+];
 
 export default function Index() {
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
@@ -46,6 +72,10 @@ export default function Index() {
   const handleUpdateBudget = (updatedBudget: Budget) => {
     console.log("Updating budget:", updatedBudget);
     setSelectedBudget(undefined);
+  };
+
+  const handleToggleRecurring = (id: string) => {
+    console.log("Toggle recurring transaction:", id);
   };
 
   return (
@@ -109,6 +139,13 @@ export default function Index() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <DailySpendingChart data={dailySpendingData} />
           <TransactionCalendar transactions={mockTransactions} />
+        </div>
+
+        <div className="mb-6">
+          <RecurringTransactionList 
+            transactions={mockRecurringTransactions}
+            onToggle={handleToggleRecurring}
+          />
         </div>
 
         <div className="mb-6">
