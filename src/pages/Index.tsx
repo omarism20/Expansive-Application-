@@ -25,6 +25,8 @@ import {
 } from "@/utils/mockData";
 import { formatCurrency } from "@/utils/helpers";
 import { SavingGoalsList } from "@/components/savings/SavingGoalsList";
+import { CurrencySelector, currencyMap } from "@/components/settings/CurrencySelector";
+import { CurrencyCode } from "@/types";
 
 const mockRecurringTransactions: RecurringTransaction[] = [
   {
@@ -55,6 +57,7 @@ export default function Index() {
   const [isTransactionFormOpen, setIsTransactionFormOpen] = useState(false);
   const [isBudgetFormOpen, setIsBudgetFormOpen] = useState(false);
   const [selectedBudget, setSelectedBudget] = useState<Budget | undefined>();
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>('USD');
   
   const expensesData = getMonthlySpendingByCategory();
   const incomeVsExpensesData = getIncomeVsExpensesByMonth();
@@ -91,13 +94,19 @@ export default function Index() {
       <main className="container py-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold">Dashboard</h2>
-          <Button 
-            onClick={() => setIsTransactionFormOpen(true)}
-            className="flex items-center gap-2"
-          >
-            <PlusCircle size={18} />
-            Add Transaction
-          </Button>
+          <div className="flex items-center gap-4">
+            <CurrencySelector 
+              value={selectedCurrency}
+              onSelect={setSelectedCurrency}
+            />
+            <Button 
+              onClick={() => setIsTransactionFormOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <PlusCircle size={18} />
+              Add Transaction
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

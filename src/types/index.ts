@@ -19,6 +19,14 @@ export interface Category {
   type: TransactionType;
 }
 
+export type CurrencyCode = 'USD' | 'EUR' | 'GBP' | 'JPY' | 'RUB' | 'TRY' | 'INR';
+
+export interface CurrencySettings {
+  code: CurrencyCode;
+  symbol: string;
+  position: 'before' | 'after';
+}
+
 export interface Budget {
   id: string;
   category: string;
