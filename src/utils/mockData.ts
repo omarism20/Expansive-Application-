@@ -169,3 +169,20 @@ export const getTodayExpenses = (transactions: Transaction[]): number => {
     .filter(tx => tx.type === 'expense' && tx.date === today)
     .reduce((sum, tx) => sum + tx.amount, 0);
 };
+
+// Get daily spending for the last 7 days
+export const getDailySpending = () => {
+  const today = new Date();
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date();
+    date.setDate(today.getDate() - i);
+    return date.toISOString().split('T')[0];
+  }).reverse();
+
+  return last7Days.map(date => ({
+    date: new Date(date).toLocaleDateString('en-US', { weekday: 'short' }),
+    amount: mockTransactions
+      .filter(tx => tx.date === date && tx.type === 'expense')
+      .reduce((sum, tx) => sum + tx.amount, 0)
+  }));
+};

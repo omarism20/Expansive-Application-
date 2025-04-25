@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { SummaryCard } from "@/components/dashboard/SummaryCard";
 import { ExpenseChart } from "@/components/dashboard/ExpenseChart";
 import { IncomeExpenseChart } from "@/components/dashboard/IncomeExpenseChart";
+import { DailySpendingChart } from "@/components/dashboard/DailySpendingChart";
+import { TransactionCalendar } from "@/components/dashboard/TransactionCalendar";
 import { BudgetProgressCard } from "@/components/budget/BudgetProgressCard";
 import { TransactionList } from "@/components/transactions/TransactionList";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
@@ -16,7 +18,8 @@ import {
   mockSummaryData,
   getMonthlySpendingByCategory,
   getIncomeVsExpensesByMonth,
-  getTodayExpenses
+  getTodayExpenses,
+  getDailySpending
 } from "@/utils/mockData";
 import { formatCurrency } from "@/utils/helpers";
 
@@ -27,6 +30,7 @@ export default function Index() {
   
   const expensesData = getMonthlySpendingByCategory();
   const incomeVsExpensesData = getIncomeVsExpensesByMonth();
+  const dailySpendingData = getDailySpending();
   const todayExpenses = getTodayExpenses(mockTransactions);
   const remainingMonthlyBudget = mockSummaryData.totalIncome - mockSummaryData.totalExpenses;
   
@@ -100,6 +104,11 @@ export default function Index() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <ExpenseChart data={expensesData} />
           <IncomeExpenseChart data={incomeVsExpensesData} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <DailySpendingChart data={dailySpendingData} />
+          <TransactionCalendar transactions={mockTransactions} />
         </div>
 
         <div className="mb-6">
