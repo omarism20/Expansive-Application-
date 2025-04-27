@@ -1,4 +1,3 @@
-
 import { CurrencySettings } from "@/types";
 
 export const formatCurrency = (amount: number, currency?: CurrencySettings) => {
@@ -26,7 +25,6 @@ export const formatDate = (date: string) => {
   });
 };
 
-// Add the missing export for getGradientByPercentage
 export const getGradientByPercentage = (percentage: number): string => {
   if (percentage < 25) {
     return "from-green-500 to-green-400"; // Low usage - Green
@@ -39,7 +37,6 @@ export const getGradientByPercentage = (percentage: number): string => {
   }
 };
 
-// Add the missing export for generateId
 export const generateId = (): string => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
