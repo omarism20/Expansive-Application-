@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   BarChart3,
   Home,
@@ -9,7 +9,9 @@ import {
   Menu,
   X,
   DollarSign,
-  PieChart
+  PieChart,
+  Calendar as CalendarIcon,
+  Target
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -20,8 +22,21 @@ import {
 } from '@/components/ui/sheet';
 
 export function Header() {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('dashboard');
   
+  // Set active tab based on current location
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === '/') setActiveTab('dashboard');
+    else if (path === '/transactions') setActiveTab('transactions');
+    else if (path === '/categories') setActiveTab('categories');
+    else if (path === '/goals') setActiveTab('goals');
+    else if (path === '/calendar') setActiveTab('calendar');
+    else if (path === '/reports') setActiveTab('reports');
+    else if (path === '/settings') setActiveTab('settings');
+  }, [location]);
+
   const NavItems = () => (
     <>
       <Link to="/" onClick={() => setActiveTab('dashboard')}>
@@ -42,13 +57,31 @@ export function Header() {
           <span className="hidden md:inline">Transactions</span>
         </Button>
       </Link>
-      <Link to="/budgets" onClick={() => setActiveTab('budgets')}>
+      <Link to="/categories" onClick={() => setActiveTab('categories')}>
         <Button 
-          variant={activeTab === 'budgets' ? 'default' : 'ghost'} 
+          variant={activeTab === 'categories' ? 'default' : 'ghost'} 
           className="flex items-center gap-2"
         >
           <PieChart size={18} />
-          <span className="hidden md:inline">Budgets</span>
+          <span className="hidden md:inline">Categories</span>
+        </Button>
+      </Link>
+      <Link to="/goals" onClick={() => setActiveTab('goals')}>
+        <Button 
+          variant={activeTab === 'goals' ? 'default' : 'ghost'} 
+          className="flex items-center gap-2"
+        >
+          <Target size={18} />
+          <span className="hidden md:inline">Goals</span>
+        </Button>
+      </Link>
+      <Link to="/calendar" onClick={() => setActiveTab('calendar')}>
+        <Button 
+          variant={activeTab === 'calendar' ? 'default' : 'ghost'} 
+          className="flex items-center gap-2"
+        >
+          <CalendarIcon size={18} />
+          <span className="hidden md:inline">Calendar</span>
         </Button>
       </Link>
       <Link to="/reports" onClick={() => setActiveTab('reports')}>
@@ -58,6 +91,15 @@ export function Header() {
         >
           <BarChart3 size={18} />
           <span className="hidden md:inline">Reports</span>
+        </Button>
+      </Link>
+      <Link to="/settings" onClick={() => setActiveTab('settings')}>
+        <Button 
+          variant={activeTab === 'settings' ? 'default' : 'ghost'} 
+          className="flex items-center gap-2"
+        >
+          <Settings size={18} />
+          <span className="hidden md:inline">Settings</span>
         </Button>
       </Link>
     </>
@@ -84,10 +126,6 @@ export function Header() {
           <Button variant="outline" size="icon" className="rounded-full">
             <PlusCircle size={18} />
             <span className="sr-only">Add Transaction</span>
-          </Button>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <Settings size={18} />
-            <span className="sr-only">Settings</span>
           </Button>
 
           {/* Mobile Navigation */}
