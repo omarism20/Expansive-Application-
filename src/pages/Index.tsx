@@ -4,7 +4,7 @@ import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
 import Header from "@/components/layout/Header";
-import { CurrencyCode, TransactionType } from "@/types";
+import { CurrencyCode, TransactionType, RecurrenceInterval } from "@/types";
 import { CurrencySelector, currencyMap } from "@/components/settings/CurrencySelector";
 import { 
   mockTransactions, 
@@ -31,7 +31,7 @@ const mockRecurringTransactions = [
     amount: 1200,
     category: "housing",
     type: "expense" as TransactionType,
-    interval: "monthly",
+    interval: "monthly" as RecurrenceInterval,
     startDate: "2024-01-01",
     lastProcessed: "2024-03-01",
     isActive: true
@@ -42,7 +42,7 @@ const mockRecurringTransactions = [
     amount: 5000,
     category: "income",
     type: "income" as TransactionType,
-    interval: "monthly",
+    interval: "monthly" as RecurrenceInterval,
     startDate: "2024-01-01",
     lastProcessed: "2024-03-01",
     isActive: true
