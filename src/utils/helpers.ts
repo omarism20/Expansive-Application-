@@ -25,3 +25,21 @@ export const formatDate = (date: string) => {
     day: 'numeric'
   });
 };
+
+// Add the missing export for getGradientByPercentage
+export const getGradientByPercentage = (percentage: number): string => {
+  if (percentage < 25) {
+    return "from-green-500 to-green-400"; // Low usage - Green
+  } else if (percentage < 50) {
+    return "from-blue-500 to-blue-400"; // Low-medium usage - Blue
+  } else if (percentage < 75) {
+    return "from-yellow-500 to-yellow-400"; // Medium-high usage - Yellow
+  } else {
+    return "from-orange-500 to-orange-400"; // High usage - Orange
+  }
+};
+
+// Add the missing export for generateId
+export const generateId = (): string => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};

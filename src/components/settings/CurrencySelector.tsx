@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CurrencyCode } from "@/types";
+import { CurrencyCode, CurrencySettings } from "@/types";
 import { DollarSign, Euro, PoundSterling, JapaneseYen, IndianRupee, RussianRuble, Currency } from "lucide-react";
 
 interface CurrencySelectorProps {
