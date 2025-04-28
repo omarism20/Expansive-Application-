@@ -1,3 +1,4 @@
+
 import { CurrencySettings } from "@/types";
 
 export const formatCurrency = (amount: number, currency?: CurrencySettings) => {
@@ -17,8 +18,9 @@ export const formatCurrency = (amount: number, currency?: CurrencySettings) => {
   return position === 'before' ? `${symbol}${formattedAmount}` : `${formattedAmount}${symbol}`;
 };
 
-export const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('en-US', {
+export const formatDate = (date: string | Date) => {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  return dateObj.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric'

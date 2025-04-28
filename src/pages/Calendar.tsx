@@ -14,8 +14,10 @@ export default function Calendar() {
   // Filter transactions for selected date
   const filteredTransactions = transactions.filter(transaction => {
     if (!selectedDate) return false;
-    const dateStr = formatDate(selectedDate);
-    return transaction.date.startsWith(dateStr.split('T')[0]);
+    // Format the selectedDate to YYYY-MM-DD for comparison
+    const selectedDateStr = selectedDate.toISOString().split('T')[0];
+    // Compare with transaction date (assuming transaction.date is in ISO format or starts with YYYY-MM-DD)
+    return transaction.date.startsWith(selectedDateStr);
   });
 
   return (
