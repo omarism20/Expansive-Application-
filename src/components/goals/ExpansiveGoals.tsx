@@ -40,7 +40,9 @@ export function ExpansiveGoals({
               style={{ width: `${Math.min(100, (goal.currentAmount / goal.targetAmount) * 100)}%` }}
             ></div>
           </div>
-          <p className="text-xs text-gray-400">Target date: {goal.targetDate}</p>
+          {goal.deadline && (
+            <p className="text-xs text-gray-400">Target date: {new Date(goal.deadline).toLocaleDateString()}</p>
+          )}
         </div>
       ))}
     </div>
