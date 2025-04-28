@@ -16,7 +16,7 @@ export default function Goals() {
     <div className="min-h-screen bg-darkbg text-white">
       <Header />
       
-      <main className="pb-20">
+      <main className="pb-24">
         <ExpansiveGoals 
           goals={goals}
           onAddGoal={handleAddSavingGoal}

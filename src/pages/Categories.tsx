@@ -40,7 +40,7 @@ export default function Categories() {
     <div className="min-h-screen bg-darkbg text-white">
       <Header />
       
-      <main className="pb-20">
+      <main className="pb-24">
         <ExpansiveCategories 
           categories={enhancedCategories as any}
           onAddCategory={handleAddCategory}

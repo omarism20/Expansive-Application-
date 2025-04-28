@@ -1,5 +1,5 @@
 
-import { Plus, Lock, BarChart3, CircleDollarSign } from "lucide-react";
+import { Plus } from "lucide-react";
 import { SavingGoal } from "@/types";
 
 interface ExpansiveGoalsProps {
@@ -25,18 +25,24 @@ export function ExpansiveGoals({
         <span>Add Goal</span>
       </button>
       
-      {/* Navigation buttons at the bottom */}
-      <div className="fixed bottom-20 left-0 right-0 flex justify-around px-6 pb-2">
-        <button className="p-3">
-          <Lock size={24} className="text-accent" />
-        </button>
-        <button className="p-3">
-          <BarChart3 size={24} className="text-gray-500" />
-        </button>
-        <button className="p-3">
-          <CircleDollarSign size={24} className="text-gray-500" />
-        </button>
-      </div>
+      {goals.map((goal) => (
+        <div key={goal.id} className="card-dark mb-4">
+          <h3 className="text-lg font-semibold mb-2">{goal.name}</h3>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs text-gray-400">Progress</span>
+            <span className="text-xs text-gray-400">
+              {goal.currentAmount} / {goal.targetAmount}
+            </span>
+          </div>
+          <div className="h-2 bg-gray-700 rounded-full mb-2">
+            <div 
+              className="h-full bg-accent rounded-full" 
+              style={{ width: `${Math.min(100, (goal.currentAmount / goal.targetAmount) * 100)}%` }}
+            ></div>
+          </div>
+          <p className="text-xs text-gray-400">Target date: {goal.targetDate}</p>
+        </div>
+      ))}
     </div>
   );
 }

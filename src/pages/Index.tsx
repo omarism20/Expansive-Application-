@@ -16,7 +16,7 @@ export default function Index() {
     <div className="min-h-screen bg-darkbg text-white">
       <Header />
       
-      <main className="pb-20">
+      <main className="pb-24">
         <ExpansiveHomePage 
           budget={2000}
           spent={950}
