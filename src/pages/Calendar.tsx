@@ -14,7 +14,8 @@ export default function Calendar() {
   // Filter transactions for selected date
   const filteredTransactions = transactions.filter(transaction => {
     if (!selectedDate) return false;
-    return transaction.date.startsWith(formatDate(selectedDate, "yyyy-MM-dd"));
+    const dateStr = formatDate(selectedDate);
+    return transaction.date.startsWith(dateStr.split('T')[0]);
   });
 
   return (
@@ -41,7 +42,7 @@ export default function Calendar() {
           <Card className="md:col-span-2">
             <CardContent className="pt-6">
               <h3 className="text-xl font-bold mb-4">
-                {selectedDate ? formatDate(selectedDate, "MMMM d, yyyy") : "Select a date"}
+                {selectedDate ? formatDate(selectedDate) : "Select a date"}
               </h3>
               {filteredTransactions.length > 0 ? (
                 <div className="space-y-4">
