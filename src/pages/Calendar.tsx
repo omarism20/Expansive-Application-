@@ -1,79 +1,63 @@
 
 import { useState } from "react";
 import Header from "@/components/layout/Header";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { Card, CardContent } from "@/components/ui/card";
 import { Transaction } from "@/types";
 import { mockTransactions } from "@/utils/mockData";
-import { formatCurrency, formatDate } from "@/utils/helpers";
+import { ExpansiveCalendar } from "@/components/calendar/ExpansiveCalendar";
 
 export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
-
-  // Filter transactions for selected date
-  const filteredTransactions = transactions.filter(transaction => {
-    if (!selectedDate) return false;
-    // Format the selectedDate to YYYY-MM-DD for comparison
-    const selectedDateStr = selectedDate.toISOString().split('T')[0];
-    // Compare with transaction date (assuming transaction.date is in ISO format or starts with YYYY-MM-DD)
-    return transaction.date.startsWith(selectedDateStr);
-  });
+  
+  // Calendar data
+  const dummyGoal = {
+    title: "Buy a Laptop",
+    total: 1000,
+    current: 600,
+    target: 1000
+  };
+  
+  // Generate calendar days (simplified example)
+  const generateCalendarDays = () => {
+    const days = [];
+    for (let week = 0; week < 5; week++) {
+      const weekDays = [];
+      for (let day = 1; day <= 7; day++) {
+        const dayNumber = week * 7 + day;
+        weekDays.push({
+          day: dayNumber <= 30 ? dayNumber : dayNumber - 30,
+          isCurrentMonth: dayNumber <= 30,
+          hasTransaction: [4, 11, 18, 25].includes(dayNumber)
+        });
+      }
+      days.push(weekDays);
+    }
+    return days;
+  };
+  
+  const calendarDays = generateCalendarDays();
+  
+  const handleSelectDay = (day: number) => {
+    console.log("Selected day:", day);
+  };
+  
+  const calendarTransactions = [
+    { date: "2024-04-25", category: "Grocery", amount: 90 }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-darkbg text-white">
       <Header />
       
-      <main className="container py-6">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold">Transaction Calendar</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="md:col-span-1">
-            <CardContent className="pt-6">
-              <CalendarComponent
-                mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                className="mx-auto"
-              />
-            </CardContent>
-          </Card>
-
-          <Card className="md:col-span-2">
-            <CardContent className="pt-6">
-              <h3 className="text-xl font-bold mb-4">
-                {selectedDate ? formatDate(selectedDate) : "Select a date"}
-              </h3>
-              {filteredTransactions.length > 0 ? (
-                <div className="space-y-4">
-                  {filteredTransactions.map(transaction => (
-                    <div 
-                      key={transaction.id} 
-                      className="flex justify-between items-center p-3 border rounded-md"
-                    >
-                      <div>
-                        <p className="font-medium">{transaction.description}</p>
-                        <p className="text-sm text-muted-foreground">{transaction.category}</p>
-                      </div>
-                      <p className={`font-medium ${
-                        transaction.type === "income" ? "text-green-600" : "text-orange-500"
-                      }`}>
-                        {transaction.type === "income" ? "+" : "-"}
-                        {formatCurrency(transaction.amount)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-muted-foreground py-8">
-                  No transactions on this date
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+      <main className="pb-20">
+        <ExpansiveCalendar 
+          goals={[dummyGoal]}
+          currentMonth="April"
+          currentYear={2024}
+          days={calendarDays}
+          transactions={calendarTransactions}
+          onSelectDay={handleSelectDay}
+        />
       </main>
     </div>
   );

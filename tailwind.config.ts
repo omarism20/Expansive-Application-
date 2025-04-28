@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +20,10 @@ export default {
 		},
 		extend: {
 			colors: {
+				// Dark theme colors
+				darkbg: '#1A2430',
+				darkcard: '#212F3F',
+				accent: '#39B780', // Green accent color
 				// Finance app specific colors
 				finance: {
 					purple: '#8B5CF6',
@@ -26,7 +31,9 @@ export default {
 					blue: '#0EA5E9',
 					'light-blue': '#D3E4FD',
 					orange: '#F97316',
-					'dark-gray': '#1A1F2C',
+					green: '#39B780',
+					'dark-gray': '#1A2430',
+					'mid-gray': '#212F3F',
 					'neutral-gray': '#8E9196',
 					'light-gray': '#D6BCFA',
 				},

@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import Header from "@/components/layout/Header";
-import { SavingGoalsList } from "@/components/savings/SavingGoalsList";
 import { SavingGoal } from "@/types";
 import { mockSavingGoals } from "@/utils/mockData";
+import { ExpansiveGoals } from "@/components/goals/ExpansiveGoals";
 
 export default function Goals() {
   const [goals, setGoals] = useState<SavingGoal[]>(mockSavingGoals);
@@ -13,20 +13,14 @@ export default function Goals() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-darkbg text-white">
       <Header />
       
-      <main className="container py-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold">Saving Goals</h2>
-        </div>
-
-        <div className="bg-white rounded-lg shadow mb-6">
-          <SavingGoalsList 
-            goals={goals} 
-            onAddClick={handleAddSavingGoal} 
-          />
-        </div>
+      <main className="pb-20">
+        <ExpansiveGoals 
+          goals={goals}
+          onAddGoal={handleAddSavingGoal}
+        />
       </main>
     </div>
   );

@@ -1,157 +1,53 @@
 
-import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  BarChart3,
   Home,
-  PlusCircle,
-  Settings,
-  Menu,
-  X,
-  DollarSign,
   PieChart,
   Calendar as CalendarIcon,
-  Target
+  Target,
+  Settings as SettingsIcon
 } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from '@/components/ui/sheet';
 
 export function Header() {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState('dashboard');
   
-  // Set active tab based on current location
-  useEffect(() => {
+  const getPageTitle = () => {
     const path = location.pathname;
-    if (path === '/') setActiveTab('dashboard');
-    else if (path === '/transactions') setActiveTab('transactions');
-    else if (path === '/categories') setActiveTab('categories');
-    else if (path === '/goals') setActiveTab('goals');
-    else if (path === '/calendar') setActiveTab('calendar');
-    else if (path === '/reports') setActiveTab('reports');
-    else if (path === '/settings') setActiveTab('settings');
-  }, [location]);
-
-  const NavItems = () => (
-    <>
-      <Link to="/" onClick={() => setActiveTab('dashboard')}>
-        <Button 
-          variant={activeTab === 'dashboard' ? 'default' : 'ghost'} 
-          className="flex items-center gap-2"
-        >
-          <Home size={18} />
-          <span className="hidden md:inline">Dashboard</span>
-        </Button>
-      </Link>
-      <Link to="/transactions" onClick={() => setActiveTab('transactions')}>
-        <Button 
-          variant={activeTab === 'transactions' ? 'default' : 'ghost'} 
-          className="flex items-center gap-2"
-        >
-          <DollarSign size={18} />
-          <span className="hidden md:inline">Transactions</span>
-        </Button>
-      </Link>
-      <Link to="/categories" onClick={() => setActiveTab('categories')}>
-        <Button 
-          variant={activeTab === 'categories' ? 'default' : 'ghost'} 
-          className="flex items-center gap-2"
-        >
-          <PieChart size={18} />
-          <span className="hidden md:inline">Categories</span>
-        </Button>
-      </Link>
-      <Link to="/goals" onClick={() => setActiveTab('goals')}>
-        <Button 
-          variant={activeTab === 'goals' ? 'default' : 'ghost'} 
-          className="flex items-center gap-2"
-        >
-          <Target size={18} />
-          <span className="hidden md:inline">Goals</span>
-        </Button>
-      </Link>
-      <Link to="/calendar" onClick={() => setActiveTab('calendar')}>
-        <Button 
-          variant={activeTab === 'calendar' ? 'default' : 'ghost'} 
-          className="flex items-center gap-2"
-        >
-          <CalendarIcon size={18} />
-          <span className="hidden md:inline">Calendar</span>
-        </Button>
-      </Link>
-      <Link to="/reports" onClick={() => setActiveTab('reports')}>
-        <Button 
-          variant={activeTab === 'reports' ? 'default' : 'ghost'} 
-          className="flex items-center gap-2"
-        >
-          <BarChart3 size={18} />
-          <span className="hidden md:inline">Reports</span>
-        </Button>
-      </Link>
-      <Link to="/settings" onClick={() => setActiveTab('settings')}>
-        <Button 
-          variant={activeTab === 'settings' ? 'default' : 'ghost'} 
-          className="flex items-center gap-2"
-        >
-          <Settings size={18} />
-          <span className="hidden md:inline">Settings</span>
-        </Button>
-      </Link>
-    </>
-  );
+    if (path === '/') return 'HOME';
+    else if (path === '/categories') return 'CATEGORIES';
+    else if (path === '/goals') return 'GOALS';
+    else if (path === '/calendar') return 'CALENDAR';
+    else if (path === '/settings') return 'SETTINGS';
+    return 'EXPANSIVE'; // Default
+  };
 
   return (
-    <header className="border-b sticky top-0 z-40 bg-background">
-      <div className="container flex h-16 items-center justify-between py-4">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="bg-primary text-primary-foreground p-1 rounded-md">
-              <DollarSign size={20} />
-            </div>
-            <h1 className="text-xl font-bold">FinanceFlow</h1>
-          </Link>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-2">
-          <NavItems />
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" className="rounded-full">
-            <PlusCircle size={18} />
-            <span className="sr-only">Add Transaction</span>
-          </Button>
-
-          {/* Mobile Navigation */}
-          <Sheet>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="outline" size="icon">
-                <Menu size={18} />
-                <span className="sr-only">Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-64 sm:max-w-sm">
-              <div className="flex flex-col gap-8 mt-8">
-                <div className="flex items-center gap-2 px-2">
-                  <div className="bg-primary text-primary-foreground p-1 rounded-md">
-                    <DollarSign size={24} />
-                  </div>
-                  <h1 className="text-xl font-bold">FinanceFlow</h1>
-                </div>
-                <nav className="flex flex-col gap-2">
-                  <NavItems />
-                </nav>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </div>
+    <header className="p-6 pb-3">
+      <h1 className="text-center text-sm font-semibold tracking-wider text-gray-400">
+        EXPANSIVE
+      </h1>
+      <h2 className="text-center text-2xl font-bold mt-4">
+        {getPageTitle()}
+      </h2>
+      
+      {/* Bottom navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-darkcard p-4 flex justify-around items-center border-t border-gray-800 z-50">
+        <Link to="/" className={`p-3 rounded-full ${location.pathname === '/' ? 'text-accent' : 'text-gray-400'}`}>
+          <Home size={24} />
+        </Link>
+        <Link to="/categories" className={`p-3 rounded-full ${location.pathname === '/categories' ? 'text-accent' : 'text-gray-400'}`}>
+          <PieChart size={24} />
+        </Link>
+        <Link to="/goals" className={`p-3 rounded-full ${location.pathname === '/goals' ? 'text-accent' : 'text-gray-400'}`}>
+          <Target size={24} />
+        </Link>
+        <Link to="/calendar" className={`p-3 rounded-full ${location.pathname === '/calendar' ? 'text-accent' : 'text-gray-400'}`}>
+          <CalendarIcon size={24} />
+        </Link>
+        <Link to="/settings" className={`p-3 rounded-full ${location.pathname === '/settings' ? 'text-accent' : 'text-gray-400'}`}>
+          <SettingsIcon size={24} />
+        </Link>
+      </nav>
     </header>
   );
 }

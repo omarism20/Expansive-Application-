@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,30 +36,23 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 215 33% 14%;  /* Dark background */
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 215 35% 18%;  /* Dark card */
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 215 33% 14%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 210 40% 98%;
@@ -70,7 +64,7 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 143 54% 49%;  /* Green accent */
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -79,13 +73,13 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 215 33% 14%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 143 54% 49%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-accent: 215 35% 18%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 35% 18%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -96,6 +90,14 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-darkbg text-white;
+  }
+  
+  .card-dark {
+    @apply bg-darkcard rounded-lg p-4;
+  }
+  
+  .accent-button {
+    @apply bg-accent text-white rounded-lg py-3 px-4 font-medium hover:bg-accent/90 transition-colors;
   }
 }
