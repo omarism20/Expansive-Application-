@@ -12,13 +12,24 @@ import Calendar from "./pages/Calendar";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
+import { getSettings } from "@/utils/storage";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Set dark mode by default
+  // Apply theme from settings
   useEffect(() => {
-    document.documentElement.classList.add('dark');
+    try {
+      const settings = getSettings();
+      if (settings.theme === "Dark") {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (error) {
+      // Fallback to dark mode if error
+      document.documentElement.classList.add('dark');
+    }
   }, []);
 
   return (

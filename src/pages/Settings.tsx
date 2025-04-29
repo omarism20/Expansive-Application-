@@ -1,29 +1,57 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import { ExpansiveSettings } from "@/components/settings/ExpansiveSettings";
+import { CurrencyModal } from "@/components/settings/CurrencyModal";
+import { ThemeModal } from "@/components/settings/ThemeModal";
+import { SecurityModal } from "@/components/settings/SecurityModal";
+import { CurrencyCode } from "@/types";
+import { getSettings, saveSettings, AppSettings } from "@/utils/storage";
 
 export default function Settings() {
-  const [currency, setCurrency] = useState("US Dollar ($)");
-  const [theme, setTheme] = useState("Light");
-  const [security, setSecurity] = useState("PIN");
-  const [notifications, setNotifications] = useState(true);
+  const [settings, setSettings] = useState<AppSettings>(getSettings());
   
-  const handleCurrencyClick = () => {
-    console.log("Currency settings clicked");
+  // Modal states
+  const [currencyModalOpen, setCurrencyModalOpen] = useState(false);
+  const [themeModalOpen, setThemeModalOpen] = useState(false);
+  const [securityModalOpen, setSecurityModalOpen] = useState(false);
+  
+  // Load settings from localStorage
+  useEffect(() => {
+    const storedSettings = getSettings();
+    setSettings(storedSettings);
+  }, []);
+  
+  // Update settings handlers
+  const handleCurrencyChange = (currency: CurrencyCode) => {
+    const updatedSettings = { ...settings, currency };
+    setSettings(updatedSettings);
+    saveSettings(updatedSettings);
   };
   
-  const handleThemeClick = () => {
-    console.log("Theme settings clicked");
+  const handleThemeChange = (theme: string) => {
+    const updatedSettings = { ...settings, theme };
+    setSettings(updatedSettings);
+    saveSettings(updatedSettings);
+    
+    // Apply theme to document
+    if (theme === 'Dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   };
   
-  const handleSecurityClick = () => {
-    console.log("Security settings clicked");
+  const handleSecurityChange = (security: string, securityValue: string) => {
+    const updatedSettings = { ...settings, security, securityValue };
+    setSettings(updatedSettings);
+    saveSettings(updatedSettings);
   };
   
   const handleNotificationsToggle = (value: boolean) => {
-    setNotifications(value);
-    console.log("Notifications toggled:", value);
+    const updatedSettings = { ...settings, notifications: value };
+    setSettings(updatedSettings);
+    saveSettings(updatedSettings);
   };
 
   return (
@@ -32,14 +60,36 @@ export default function Settings() {
       
       <main className="pb-24">
         <ExpansiveSettings 
-          currency={currency}
-          theme={theme}
-          security={security}
-          notifications={notifications}
-          onCurrencyClick={handleCurrencyClick}
-          onThemeClick={handleThemeClick}
-          onSecurityClick={handleSecurityClick}
+          currency={settings.currency}
+          theme={settings.theme}
+          security={settings.security}
+          notifications={settings.notifications}
+          onCurrencyClick={() => setCurrencyModalOpen(true)}
+          onThemeClick={() => setThemeModalOpen(true)}
+          onSecurityClick={() => setSecurityModalOpen(true)}
           onNotificationsToggle={handleNotificationsToggle}
+        />
+        
+        <CurrencyModal
+          open={currencyModalOpen}
+          onClose={() => setCurrencyModalOpen(false)}
+          currentCurrency={settings.currency}
+          onSave={handleCurrencyChange}
+        />
+        
+        <ThemeModal
+          open={themeModalOpen}
+          onClose={() => setThemeModalOpen(false)}
+          currentTheme={settings.theme}
+          onSave={handleThemeChange}
+        />
+        
+        <SecurityModal
+          open={securityModalOpen}
+          onClose={() => setSecurityModalOpen(false)}
+          currentSecurity={settings.security}
+          currentSecurityValue={settings.securityValue}
+          onSave={handleSecurityChange}
         />
       </main>
     </div>

@@ -1,15 +1,29 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import { SavingGoal } from "@/types";
-import { mockSavingGoals } from "@/utils/mockData";
 import { ExpansiveGoals } from "@/components/goals/ExpansiveGoals";
+import { SavingGoalForm } from "@/components/goals/SavingGoalForm";
+import { getSavingGoals, saveSavingGoals } from "@/utils/storage";
 
 export default function Goals() {
-  const [goals, setGoals] = useState<SavingGoal[]>(mockSavingGoals);
+  const [goals, setGoals] = useState<SavingGoal[]>([]);
+  const [isGoalFormOpen, setIsGoalFormOpen] = useState(false);
+  
+  useEffect(() => {
+    loadGoals();
+  }, []);
+  
+  const loadGoals = () => {
+    const storedGoals = getSavingGoals();
+    setGoals(storedGoals);
+  };
 
-  const handleAddSavingGoal = () => {
-    console.log("Add saving goal clicked");
+  const handleAddSavingGoal = (newGoal: SavingGoal) => {
+    const updatedGoals = [...goals, newGoal];
+    setGoals(updatedGoals);
+    saveSavingGoals(updatedGoals);
+    setIsGoalFormOpen(false);
   };
 
   return (
@@ -19,7 +33,13 @@ export default function Goals() {
       <main className="pb-24">
         <ExpansiveGoals 
           goals={goals}
-          onAddGoal={handleAddSavingGoal}
+          onAddGoal={() => setIsGoalFormOpen(true)}
+        />
+        
+        <SavingGoalForm
+          open={isGoalFormOpen}
+          onClose={() => setIsGoalFormOpen(false)}
+          onSubmit={handleAddSavingGoal}
         />
       </main>
     </div>

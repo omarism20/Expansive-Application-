@@ -1,6 +1,7 @@
 
 import { ChevronRight } from "lucide-react";
 import { formatCurrency } from "@/utils/helpers";
+import { format } from "date-fns";
 
 interface GoalProgress {
   title: string;
@@ -20,8 +21,9 @@ interface ExpansiveCalendarProps {
   currentMonth: string;
   currentYear: number;
   days: CalendarDay[][];
-  transactions: { date: string; category: string; amount: number }[];
+  transactions: { date: string; category: string; amount: number; type?: string }[];
   onSelectDay: (day: number) => void;
+  selectedDate?: Date;
 }
 
 export function ExpansiveCalendar({
@@ -30,8 +32,11 @@ export function ExpansiveCalendar({
   currentYear,
   days,
   transactions,
-  onSelectDay
+  onSelectDay,
+  selectedDate
 }: ExpansiveCalendarProps) {
+  const formattedDate = selectedDate ? format(selectedDate, 'MMMM d, yyyy') : '';
+  
   return (
     <div className="p-4 max-w-md mx-auto pb-24">
       {goals.map((goal, index) => (
@@ -76,7 +81,8 @@ export function ExpansiveCalendar({
                 key={dayIndex}
                 className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center text-sm ${
                   !day.isCurrentMonth ? "text-gray-600" : 
-                  day.hasTransaction ? "bg-purple-600" : ""
+                  day.hasTransaction ? "bg-purple-600" : 
+                  selectedDate && selectedDate.getDate() === day.day ? "ring-2 ring-accent" : ""
                 }`}
                 onClick={() => onSelectDay(day.day)}
                 disabled={!day.isCurrentMonth}
@@ -90,13 +96,21 @@ export function ExpansiveCalendar({
       
       {transactions.length > 0 && (
         <div className="card-dark">
-          <h3 className="font-medium mb-3">April 25, 2024</h3>
+          <h3 className="font-medium mb-3">{formattedDate}</h3>
           {transactions.map((tx, index) => (
             <div key={index} className="flex justify-between items-center mb-2">
               <span>{tx.category}</span>
-              <span>${tx.amount}</span>
+              <span className={tx.type === 'expense' ? 'text-red-400' : 'text-green-400'}>
+                {tx.type === 'expense' ? '-' : '+'}{formatCurrency(tx.amount)}
+              </span>
             </div>
           ))}
+        </div>
+      )}
+      
+      {transactions.length === 0 && selectedDate && (
+        <div className="card-dark text-center py-4">
+          <p className="text-gray-400">No transactions for {formattedDate}</p>
         </div>
       )}
     </div>
