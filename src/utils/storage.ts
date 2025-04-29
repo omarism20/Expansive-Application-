@@ -6,7 +6,8 @@ import {
   Transaction, 
   SavingGoal, 
   CurrencyCode,
-  RecurringTransaction 
+  RecurringTransaction,
+  Category 
 } from "@/types";
 
 // Keys for localStorage
@@ -14,7 +15,8 @@ const STORAGE_KEYS = {
   TRANSACTIONS: 'finance-app-transactions',
   SAVING_GOALS: 'finance-app-saving-goals',
   SETTINGS: 'finance-app-settings',
-  RECURRING_TRANSACTIONS: 'finance-app-recurring-transactions'
+  RECURRING_TRANSACTIONS: 'finance-app-recurring-transactions',
+  CATEGORIES: 'finance-app-categories'
 };
 
 // Default settings
@@ -57,6 +59,17 @@ export const getSavingGoals = (): SavingGoal[] => {
   return stored ? JSON.parse(stored) : [];
 };
 
+// Save categories to localStorage
+export const saveCategories = (categories: Category[]): void => {
+  localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+};
+
+// Get categories from localStorage
+export const getCategories = (): Category[] => {
+  const stored = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+  return stored ? JSON.parse(stored) : [];
+};
+
 // Save recurring transactions to localStorage
 export const saveRecurringTransactions = (recurring: RecurringTransaction[]): void => {
   localStorage.setItem(STORAGE_KEYS.RECURRING_TRANSACTIONS, JSON.stringify(recurring));
@@ -91,6 +104,12 @@ export const initializeStorage = (): void => {
   if (!localStorage.getItem(STORAGE_KEYS.SAVING_GOALS)) {
     import('@/utils/mockData').then(({ mockSavingGoals }) => {
       saveSavingGoals(mockSavingGoals);
+    });
+  }
+  
+  if (!localStorage.getItem(STORAGE_KEYS.CATEGORIES)) {
+    import('@/utils/mockData').then(({ mockCategories }) => {
+      saveCategories(mockCategories);
     });
   }
   
