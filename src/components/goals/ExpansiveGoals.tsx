@@ -19,6 +19,7 @@ export function ExpansiveGoals({
     <div className="p-4 max-w-md mx-auto pb-24">
       <h2 className="text-sm text-gray-400 mb-6">Create and track savings</h2>
       
+      {/* Add Goal Button */}
       <button 
         className="card-dark w-full mb-6 flex items-center px-4 py-3"
         onClick={onAddGoal}
@@ -29,6 +30,7 @@ export function ExpansiveGoals({
         <span>Add Goal</span>
       </button>
       
+      {/* Goal List */}
       {goals.map((goal) => (
         <div key={goal.id} className="card-dark mb-4">
           <div className="flex justify-between items-start mb-2">
