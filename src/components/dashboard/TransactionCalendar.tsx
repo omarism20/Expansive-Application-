@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Transaction } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { CalendarDays } from "lucide-react";
@@ -58,6 +58,9 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
               <DialogTitle>
                 Transactions for {selectedDate ? formatDate(selectedDate.toISOString()) : ''}
               </DialogTitle>
+              <DialogDescription>
+                View all transactions for this date
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               {selectedDateTransactions.length === 0 ? (

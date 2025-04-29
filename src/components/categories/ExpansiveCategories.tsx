@@ -16,12 +16,22 @@ export function ExpansiveCategories({
   // Filter categories by type
   const expenseCategories = categories.filter(cat => cat.type === 'expense');
   const incomeCategories = categories.filter(cat => cat.type === 'income');
+  
+  const handleCategoryClick = (category: Category) => {
+    console.log("Category clicked:", category);
+    onCategoryClick(category);
+  };
 
+  const handleAddCategory = () => {
+    console.log("Add category clicked");
+    onAddCategory();
+  };
+  
   return (
     <div className="p-4 max-w-md mx-auto pb-24">
       <button 
         className="card-dark w-full mb-6 flex items-center px-4 py-3"
-        onClick={onAddCategory}
+        onClick={handleAddCategory}
       >
         <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center mr-3">
           <Plus size={18} />
@@ -38,7 +48,7 @@ export function ExpansiveCategories({
               <div 
                 key={category.id}
                 className="flex items-center justify-between py-4 border-b border-gray-700 last:border-b-0 cursor-pointer px-4"
-                onClick={() => onCategoryClick(category)}
+                onClick={() => handleCategoryClick(category)}
               >
                 <div className="flex items-center">
                   <div 
@@ -65,7 +75,7 @@ export function ExpansiveCategories({
               <div 
                 key={category.id}
                 className="flex items-center justify-between py-4 border-b border-gray-700 last:border-b-0 cursor-pointer px-4"
-                onClick={() => onCategoryClick(category)}
+                onClick={() => handleCategoryClick(category)}
               >
                 <div className="flex items-center">
                   <div 
@@ -85,7 +95,7 @@ export function ExpansiveCategories({
       
       <button 
         className="w-full mt-6 flex items-center justify-center text-accent py-3"
-        onClick={onAddCategory}
+        onClick={handleAddCategory}
       >
         <Plus size={20} className="mr-2" />
         Add Category

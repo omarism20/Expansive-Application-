@@ -39,57 +39,105 @@ export interface AppSettings {
 
 // Save transactions to localStorage
 export const saveTransactions = (transactions: Transaction[]): void => {
-  localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
+  try {
+    localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
+  } catch (error) {
+    console.error("Error saving transactions to localStorage:", error);
+  }
 };
 
 // Get transactions from localStorage
 export const getTransactions = (): Transaction[] => {
-  const stored = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
-  return stored ? JSON.parse(stored) : [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Error retrieving transactions from localStorage:", error);
+    return [];
+  }
 };
 
 // Save saving goals to localStorage
 export const saveSavingGoals = (goals: SavingGoal[]): void => {
-  localStorage.setItem(STORAGE_KEYS.SAVING_GOALS, JSON.stringify(goals));
+  try {
+    localStorage.setItem(STORAGE_KEYS.SAVING_GOALS, JSON.stringify(goals));
+  } catch (error) {
+    console.error("Error saving goals to localStorage:", error);
+  }
 };
 
 // Get saving goals from localStorage
 export const getSavingGoals = (): SavingGoal[] => {
-  const stored = localStorage.getItem(STORAGE_KEYS.SAVING_GOALS);
-  return stored ? JSON.parse(stored) : [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.SAVING_GOALS);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Error retrieving goals from localStorage:", error);
+    return [];
+  }
 };
 
 // Save categories to localStorage
 export const saveCategories = (categories: Category[]): void => {
-  localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+  try {
+    console.log("Saving categories:", categories);
+    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+  } catch (error) {
+    console.error("Error saving categories to localStorage:", error);
+  }
 };
 
 // Get categories from localStorage
 export const getCategories = (): Category[] => {
-  const stored = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
-  return stored ? JSON.parse(stored) : [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+    const parsedCategories = stored ? JSON.parse(stored) : [];
+    console.log("Retrieved categories:", parsedCategories);
+    return parsedCategories;
+  } catch (error) {
+    console.error("Error retrieving categories from localStorage:", error);
+    return [];
+  }
 };
 
 // Save recurring transactions to localStorage
 export const saveRecurringTransactions = (recurring: RecurringTransaction[]): void => {
-  localStorage.setItem(STORAGE_KEYS.RECURRING_TRANSACTIONS, JSON.stringify(recurring));
+  try {
+    localStorage.setItem(STORAGE_KEYS.RECURRING_TRANSACTIONS, JSON.stringify(recurring));
+  } catch (error) {
+    console.error("Error saving recurring transactions to localStorage:", error);
+  }
 };
 
 // Get recurring transactions from localStorage
 export const getRecurringTransactions = (): RecurringTransaction[] => {
-  const stored = localStorage.getItem(STORAGE_KEYS.RECURRING_TRANSACTIONS);
-  return stored ? JSON.parse(stored) : [];
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.RECURRING_TRANSACTIONS);
+    return stored ? JSON.parse(stored) : [];
+  } catch (error) {
+    console.error("Error retrieving recurring transactions from localStorage:", error);
+    return [];
+  }
 };
 
 // Save settings to localStorage
 export const saveSettings = (settings: AppSettings): void => {
-  localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+  try {
+    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
+  } catch (error) {
+    console.error("Error saving settings to localStorage:", error);
+  }
 };
 
 // Get settings from localStorage
 export const getSettings = (): AppSettings => {
-  const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-  return stored ? JSON.parse(stored) : DEFAULT_SETTINGS;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.SETTINGS);
+    return stored ? JSON.parse(stored) : DEFAULT_SETTINGS;
+  } catch (error) {
+    console.error("Error retrieving settings from localStorage:", error);
+    return DEFAULT_SETTINGS;
+  }
 };
 
 // Initialize storage with mock data if empty

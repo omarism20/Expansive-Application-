@@ -1,5 +1,5 @@
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, CalendarIcon } from "lucide-react";
 import { formatCurrency } from "@/utils/helpers";
 import { format } from "date-fns";
 

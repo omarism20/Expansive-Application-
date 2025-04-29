@@ -23,16 +23,19 @@ export default function Categories() {
   };
 
   const handleAddCategory = () => {
+    console.log("Add category handler called");
     setEditCategory(null);
     setIsCategoryFormOpen(true);
   };
   
   const handleCategoryClick = (category: Category) => {
+    console.log("Category clicked handler called", category);
     setEditCategory(category);
     setIsCategoryFormOpen(true);
   };
 
   const handleSaveCategory = (category: Category) => {
+    console.log("Saving category", category);
     if (editCategory) {
       // Update existing category
       const updatedCategories = categories.map(cat => 
@@ -63,6 +66,7 @@ export default function Categories() {
   };
 
   const handleDeleteCategory = (categoryId: string) => {
+    console.log("Deleting category", categoryId);
     const updatedCategories = categories.filter(cat => cat.id !== categoryId);
     setCategories(updatedCategories);
     saveCategories(updatedCategories);
