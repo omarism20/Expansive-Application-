@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import { TransactionForm } from "@/components/transactions/TransactionForm";
@@ -8,9 +7,10 @@ import {
   getTransactions, 
   saveTransactions, 
   getSettings, 
-  initializeStorage 
+  initializeStorage,
+  saveBudget,
+  getBudget
 } from "@/utils/storage";
-import { currencyMap } from "@/components/settings/CurrencySelector";
 import { toast } from "@/hooks/use-toast";
 
 export default function Index() {
@@ -23,6 +23,12 @@ export default function Index() {
   useEffect(() => {
     initializeStorage();
     loadTransactions();
+    
+    // Load saved budget from storage
+    const savedBudget = getBudget();
+    if (savedBudget) {
+      setBudget(savedBudget);
+    }
   }, []);
   
   const loadTransactions = () => {
@@ -46,6 +52,16 @@ export default function Index() {
     });
     
     setIsTransactionFormOpen(false);
+  };
+  
+  const handleBudgetChange = (newBudget: number) => {
+    setBudget(newBudget);
+    saveBudget(newBudget);
+    
+    toast({
+      title: "Budget Updated",
+      description: `Monthly budget updated to $${newBudget.toLocaleString()}`
+    });
   };
   
   // Calculate totals
@@ -95,6 +111,7 @@ export default function Index() {
           remaining={remaining}
           todayExpenses={todayExpenses}
           onAddTransaction={() => setIsTransactionFormOpen(true)}
+          onBudgetChange={handleBudgetChange}
         />
       </main>
       

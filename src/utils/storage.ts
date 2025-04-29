@@ -1,4 +1,3 @@
-
 // Storage utility for persisting data in localStorage
 
 // Types
@@ -168,5 +167,31 @@ export const initializeStorage = (): void => {
   
   if (!localStorage.getItem(STORAGE_KEYS.SETTINGS)) {
     saveSettings(DEFAULT_SETTINGS);
+  }
+};
+
+const BUDGET_KEY = 'financetracker_budget';
+
+// Save budget to localStorage
+export const saveBudget = (budget: number) => {
+  try {
+    localStorage.setItem(BUDGET_KEY, JSON.stringify(budget));
+    console.log("Budget saved:", budget);
+  } catch (error) {
+    console.error("Error saving budget:", error);
+  }
+};
+
+// Get budget from localStorage
+export const getBudget = (): number | null => {
+  try {
+    const storedBudget = localStorage.getItem(BUDGET_KEY);
+    if (storedBudget) {
+      return JSON.parse(storedBudget);
+    }
+    return null;
+  } catch (error) {
+    console.error("Error retrieving budget:", error);
+    return null;
   }
 };
