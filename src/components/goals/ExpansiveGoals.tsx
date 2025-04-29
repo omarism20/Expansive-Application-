@@ -1,5 +1,5 @@
 
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Plus } from "lucide-react";
 import { SavingGoal } from "@/types";
 
 interface ExpansiveGoalsProps {
