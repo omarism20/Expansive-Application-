@@ -95,9 +95,8 @@ export const initializeStorage = (): void => {
   }
   
   if (!localStorage.getItem(STORAGE_KEYS.RECURRING_TRANSACTIONS)) {
-    import('@/utils/mockData').then(({ mockRecurringTransactions }) => {
-      saveRecurringTransactions(mockRecurringTransactions);
-    });
+    // Initialize with empty array since mockData may not have recurring transactions
+    saveRecurringTransactions([]);
   }
   
   if (!localStorage.getItem(STORAGE_KEYS.SETTINGS)) {

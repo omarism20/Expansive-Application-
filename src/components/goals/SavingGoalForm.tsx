@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { SavingGoal } from "@/types";
@@ -29,9 +28,10 @@ interface SavingGoalFormProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (goal: SavingGoal) => void;
+  editGoal?: SavingGoal;
 }
 
-export function SavingGoalForm({ open, onClose, onSubmit }: SavingGoalFormProps) {
+export function SavingGoalForm({ open, onClose, onSubmit, editGoal }: SavingGoalFormProps) {
   const [goal, setGoal] = useState<SavingGoal>({
     id: generateId(),
     name: "",
@@ -41,6 +41,22 @@ export function SavingGoalForm({ open, onClose, onSubmit }: SavingGoalFormProps)
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  // Initialize form with edit data if provided
+  useEffect(() => {
+    if (editGoal) {
+      setGoal(editGoal);
+    } else {
+      // Reset form for new goal
+      setGoal({
+        id: generateId(),
+        name: "",
+        targetAmount: 0,
+        currentAmount: 0,
+        autoContribute: false,
+      });
+    }
+  }, [editGoal, open]);
 
   const handleChange = (field: keyof SavingGoal, value: any) => {
     setGoal(prev => ({ ...prev, [field]: value }));
@@ -87,8 +103,10 @@ export function SavingGoalForm({ open, onClose, onSubmit }: SavingGoalFormProps)
     onSubmit(goal);
     
     toast({
-      title: "Goal Added",
-      description: "Your saving goal has been added successfully",
+      title: editGoal ? "Goal Updated" : "Goal Added",
+      description: editGoal 
+        ? "Your saving goal has been updated successfully" 
+        : "Your saving goal has been added successfully",
     });
     
     onClose();
@@ -99,9 +117,9 @@ export function SavingGoalForm({ open, onClose, onSubmit }: SavingGoalFormProps)
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Add Saving Goal</DialogTitle>
+            <DialogTitle>{editGoal ? "Edit" : "Add"} Saving Goal</DialogTitle>
             <DialogDescription>
-              Create a new saving goal to track your progress.
+              {editGoal ? "Update your" : "Create a new"} saving goal to track your progress.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -234,7 +252,7 @@ export function SavingGoalForm({ open, onClose, onSubmit }: SavingGoalFormProps)
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Add Goal</Button>
+            <Button type="submit">{editGoal ? "Update" : "Add"} Goal</Button>
           </DialogFooter>
         </form>
       </DialogContent>
