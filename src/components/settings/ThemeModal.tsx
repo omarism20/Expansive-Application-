@@ -8,7 +8,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, PaintBrush } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface ThemeModalProps {
@@ -40,32 +40,39 @@ export function ThemeModal({ open, onClose, currentTheme, onSave }: ThemeModalPr
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Theme Settings</DialogTitle>
+          <div className="flex items-center gap-2 mb-1">
+            <PaintBrush className="w-5 h-5 text-accent" />
+            <DialogTitle>Theme Settings</DialogTitle>
+          </div>
         </DialogHeader>
         <div className="py-4">
-          <p className="text-muted-foreground mb-4">
-            Choose your preferred theme.
+          <p className="text-muted-foreground mb-6">
+            Choose your preferred theme for the application interface.
           </p>
           <div className="flex gap-4 justify-center">
             <Button
               variant={selected === "Light" ? "default" : "outline"}
-              className="flex flex-col items-center gap-2 p-6 h-auto"
+              className="flex flex-col items-center gap-3 p-6 h-auto w-32"
               onClick={() => setSelected("Light")}
             >
-              <Sun size={32} />
+              <div className="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center">
+                <Sun size={28} />
+              </div>
               <span>Light</span>
             </Button>
             <Button
               variant={selected === "Dark" ? "default" : "outline"}
-              className="flex flex-col items-center gap-2 p-6 h-auto"
+              className="flex flex-col items-center gap-3 p-6 h-auto w-32"
               onClick={() => setSelected("Dark")}
             >
-              <Moon size={32} />
+              <div className="w-12 h-12 rounded-full bg-darkcard text-white flex items-center justify-center">
+                <Moon size={28} />
+              </div>
               <span>Dark</span>
             </Button>
           </div>
         </div>
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button type="button" variant="outline" onClick={onClose}>
             Cancel
           </Button>

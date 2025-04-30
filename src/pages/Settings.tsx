@@ -7,6 +7,7 @@ import { ThemeModal } from "@/components/settings/ThemeModal";
 import { SecurityModal } from "@/components/settings/SecurityModal";
 import { CurrencyCode } from "@/types";
 import { getSettings, saveSettings, AppSettings } from "@/utils/storage";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Settings() {
   const [settings, setSettings] = useState<AppSettings>(getSettings());
@@ -91,6 +92,8 @@ export default function Settings() {
           currentSecurityValue={settings.securityValue}
           onSave={handleSecurityChange}
         />
+
+        <Toaster />
       </main>
     </div>
   );

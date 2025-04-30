@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { CurrencySelector } from "@/components/settings/CurrencySelector";
 import { CurrencyCode } from "@/types";
 import { toast } from "@/hooks/use-toast";
+import { Coins } from "lucide-react";
 
 interface CurrencyModalProps {
   open: boolean;
@@ -41,15 +42,18 @@ export function CurrencyModal({ open, onClose, currentCurrency, onSave }: Curren
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Currency Settings</DialogTitle>
+          <div className="flex items-center gap-2 mb-1">
+            <Coins className="w-5 h-5 text-accent" />
+            <DialogTitle>Currency Settings</DialogTitle>
+          </div>
         </DialogHeader>
         <div className="py-4">
-          <p className="text-muted-foreground mb-4">
-            Select your preferred currency for displaying amounts.
+          <p className="text-muted-foreground mb-6">
+            Select your preferred currency for displaying amounts throughout the application.
           </p>
           <CurrencySelector value={selected} onSelect={setSelected} />
         </div>
-        <DialogFooter>
+        <DialogFooter className="gap-2">
           <Button type="button" variant="outline" onClick={onClose}>
             Cancel
           </Button>
