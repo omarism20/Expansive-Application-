@@ -50,7 +50,7 @@ export function ExpansiveSettings({
           onClick={onThemeClick}
         >
           <div className="flex items-center gap-3">
-            <PaintBrush size={22} className="text-accent" />
+            <Paintbrush size={22} className="text-accent" />
             <span>Theme</span>
           </div>
           <div className="flex items-center">

@@ -41,7 +41,7 @@ export function ThemeModal({ open, onClose, currentTheme, onSave }: ThemeModalPr
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <div className="flex items-center gap-2 mb-1">
-            <PaintBrush className="w-5 h-5 text-accent" />
+            <Paintbrush className="w-5 h-5 text-accent" />
             <DialogTitle>Theme Settings</DialogTitle>
           </div>
         </DialogHeader>
