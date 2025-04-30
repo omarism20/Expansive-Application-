@@ -37,10 +37,10 @@ export default function Calendar() {
     setCalendarTransactions(filtered);
   };
   
-  // Generate calendar days
+  // Generate calendar days with improved date handling
   const generateCalendarDays = () => {
     const days = [];
-    const date = new Date();
+    const date = selectedDate || new Date();
     const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
     const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     const prevMonthDays = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
@@ -106,14 +106,19 @@ export default function Calendar() {
   }, []);
   
   const handleSelectDay = (day: number) => {
-    const date = new Date();
-    const selectedDate = new Date(date.getFullYear(), date.getMonth(), day);
+    const currentDate = selectedDate || new Date();
+    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     setSelectedDate(selectedDate);
   };
   
-  // Get month name and year
-  const currentMonth = new Date().toLocaleString('default', { month: 'long' });
-  const currentYear = new Date().getFullYear();
+  // Get month name and year from selected date
+  const currentMonth = selectedDate ? 
+    selectedDate.toLocaleString('default', { month: 'long' }) : 
+    new Date().toLocaleString('default', { month: 'long' });
+    
+  const currentYear = selectedDate ? 
+    selectedDate.getFullYear() : 
+    new Date().getFullYear();
 
   return (
     <div className="min-h-screen bg-darkbg text-white">

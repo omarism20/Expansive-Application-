@@ -41,6 +41,9 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
           selected={selectedDate}
           onSelect={handleSelect}
           className="rounded-md border"
+          captionLayout="dropdown-buttons"
+          fromYear={2020}
+          toYear={2030}
           modifiers={{
             marked: (date) => {
               const dateStr = date.toISOString().split('T')[0];

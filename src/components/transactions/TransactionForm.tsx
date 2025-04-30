@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon, Trash2 } from "lucide-react";
@@ -240,6 +239,9 @@ export function TransactionForm({
                     onSelect={(date) => handleChange("date", date)}
                     initialFocus
                     className={cn("p-3 pointer-events-auto")}
+                    captionLayout="dropdown-buttons"
+                    fromYear={2020}
+                    toYear={2030}
                   />
                 </PopoverContent>
               </Popover>
