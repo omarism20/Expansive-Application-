@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CurrencyCode, CurrencySettings } from "@/types";
-import { DollarSign, Euro, PoundSterling, JapaneseYen, IndianRupee, RussianRuble, TurkishLira } from "lucide-react";
+import { DollarSign, Euro, PoundSterling, JapaneseYen, IndianRupee, RussianRuble, BanknoteIcon } from "lucide-react";
 
 interface CurrencySelectorProps {
   value: CurrencyCode;
@@ -23,7 +23,7 @@ const currencies = [
   { code: 'JPY', label: 'Japanese Yen', symbol: '¥', icon: JapaneseYen },
   { code: 'INR', label: 'Indian Rupee', symbol: '₹', icon: IndianRupee },
   { code: 'RUB', label: 'Russian Ruble', symbol: '₽', icon: RussianRuble },
-  { code: 'TRY', label: 'Turkish Lira', symbol: '₺', icon: TurkishLira },
+  { code: 'TRY', label: 'Turkish Lira', symbol: '₺', icon: BanknoteIcon },
 ] as const;
 
 export function CurrencySelector({ value, onSelect }: CurrencySelectorProps) {
@@ -58,4 +58,3 @@ export const currencyMap: Record<CurrencyCode, CurrencySettings> = {
   RUB: { code: 'RUB', symbol: '₽', position: 'after' },
   TRY: { code: 'TRY', symbol: '₺', position: 'before' },
 };
-
