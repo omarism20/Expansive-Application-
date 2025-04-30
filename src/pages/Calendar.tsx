@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import { Transaction } from "@/types";
 import { getTransactions, getSavingGoals } from "@/utils/storage";
-import { ExpansiveCalendar } from "@/components/calendar/ExpansiveCalendar";
+import { CalendarView } from "@/components/calendar/CalendarView";
 
 export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -37,60 +37,6 @@ export default function Calendar() {
     setCalendarTransactions(filtered);
   };
   
-  // Generate calendar days with improved date handling
-  const generateCalendarDays = () => {
-    const days = [];
-    const date = selectedDate || new Date();
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    const prevMonthDays = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
-    
-    // Create array of transaction days for highlighting
-    const transactionDays = new Set();
-    transactions.forEach(tx => {
-      const txDate = new Date(tx.date);
-      if (txDate.getMonth() === date.getMonth() && txDate.getFullYear() === date.getFullYear()) {
-        transactionDays.add(txDate.getDate());
-      }
-    });
-    
-    // Previous month days
-    for (let week = 0; week < 6; week++) {
-      const weekDays = [];
-      for (let day = 0; day < 7; day++) {
-        const dayNumber = week * 7 + day + 1 - firstDay;
-        let currentDay;
-        let isCurrentMonth;
-        
-        if (dayNumber <= 0) {
-          // Previous month
-          currentDay = prevMonthDays + dayNumber;
-          isCurrentMonth = false;
-        } else if (dayNumber > daysInMonth) {
-          // Next month
-          currentDay = dayNumber - daysInMonth;
-          isCurrentMonth = false;
-        } else {
-          // Current month
-          currentDay = dayNumber;
-          isCurrentMonth = true;
-        }
-        
-        weekDays.push({
-          day: currentDay,
-          isCurrentMonth,
-          hasTransaction: isCurrentMonth && transactionDays.has(currentDay)
-        });
-      }
-      days.push(weekDays);
-      if (days.length === 6 && weekDays[6].day > 7) break; // Don't show unnecessary 6th week
-    }
-    
-    return days;
-  };
-  
-  const calendarDays = generateCalendarDays();
-  
   // Load saving goal for calendar
   const [goals, setGoals] = useState([]);
   
@@ -104,35 +50,17 @@ export default function Calendar() {
     }));
     setGoals(formattedGoals.slice(0, 1)); // Just show the first goal
   }, []);
-  
-  const handleSelectDay = (day: number) => {
-    const currentDate = selectedDate || new Date();
-    const newSelectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    setSelectedDate(newSelectedDate);
-  };
-  
-  // Get month name and year from selected date
-  const currentMonth = selectedDate ? 
-    selectedDate.toLocaleString('default', { month: 'long' }) : 
-    new Date().toLocaleString('default', { month: 'long' });
-    
-  const currentYear = selectedDate ? 
-    selectedDate.getFullYear() : 
-    new Date().getFullYear();
 
   return (
     <div className="min-h-screen bg-darkbg text-white">
       <Header />
       
       <main className="pb-24">
-        <ExpansiveCalendar 
+        <CalendarView
           goals={goals}
-          currentMonth={currentMonth}
-          currentYear={currentYear}
-          days={calendarDays}
-          transactions={calendarTransactions}
-          onSelectDay={handleSelectDay}
           selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          transactions={calendarTransactions}
         />
       </main>
     </div>
