@@ -107,8 +107,8 @@ export default function Calendar() {
   
   const handleSelectDay = (day: number) => {
     const currentDate = selectedDate || new Date();
-    const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    setSelectedDate(selectedDate);
+    const newSelectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    setSelectedDate(newSelectedDate);
   };
   
   // Get month name and year from selected date
