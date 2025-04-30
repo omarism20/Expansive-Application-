@@ -8,7 +8,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, PaintBrush } from "lucide-react";
+import { Sun, Moon, Paintbrush } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface ThemeModalProps {

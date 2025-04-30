@@ -1,5 +1,5 @@
 
-import { ChevronRight, Coins, PaintBrush, Bell, Shield } from "lucide-react";
+import { ChevronRight, Coins, Paintbrush, Bell, Shield } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 
