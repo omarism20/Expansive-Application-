@@ -53,8 +53,7 @@ function Calendar({
         dropdown: "absolute mt-1 bg-darkcard border border-gray-600 rounded shadow-lg p-2 max-h-80 overflow-y-auto z-50 focus:outline-none text-white", // Enhanced dropdown styles
         dropdown_month: "flex justify-center py-2 text-base text-white", // Enhanced text visibility
         dropdown_year: "flex justify-center py-2 text-base text-white", // Enhanced text visibility
-        dropdown_month_button: "px-4 py-2 rounded hover:bg-gray-700 transition-colors", // Enhanced button styles
-        dropdown_year_button: "px-4 py-2 rounded hover:bg-gray-700 transition-colors", // Enhanced button styles
+        // Removed the incorrect properties: dropdown_month_button and dropdown_year_button
         ...classNames,
       }}
       components={{
