@@ -79,8 +79,12 @@ function Calendar({
               </button>
               {dayData && (
                 <span className={cn(
-                  "text-[0.65rem] font-medium absolute bottom-1",
-                  dayData.net > 0 ? "text-green-400" : dayData.net < 0 ? "text-red-400" : "text-gray-400"
+                  "text-[0.7rem] font-bold absolute bottom-0.5 px-1 py-0.5 rounded",
+                  dayData.net > 0 
+                    ? "bg-green-500/20 text-green-400 border border-green-400/30" 
+                    : dayData.net < 0 
+                      ? "bg-red-500/20 text-red-400 border border-red-400/30" 
+                      : "bg-gray-500/20 text-gray-300 border border-gray-400/30"
                 )}>
                   {formatCurrency(Math.abs(dayData.net))}
                 </span>
