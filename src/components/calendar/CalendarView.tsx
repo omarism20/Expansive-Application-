@@ -1,10 +1,10 @@
 
-import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, CreditCard } from "lucide-react";
 import { formatCurrency } from "@/utils/helpers";
+import { Badge } from "@/components/ui/badge";
 
 interface GoalProgress {
   title: string;
@@ -28,40 +28,64 @@ export function CalendarView({
 }: CalendarViewProps) {
   const formattedDate = selectedDate ? format(selectedDate, 'MMMM d, yyyy') : '';
 
+  // Calculate total income and expenses for the selected date
+  const selectedTransactions = transactions || [];
+  const totalIncome = selectedTransactions
+    .filter(tx => tx.type === 'income')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+  
+  const totalExpenses = selectedTransactions
+    .filter(tx => tx.type === 'expense')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+
   return (
-    <div className="p-4 max-w-md mx-auto pb-24">
-      {goals.map((goal, index) => (
-        <div key={index} className="card-dark mb-6">
-          <h3 className="font-medium mb-2">{goal.title}</h3>
-          <p className="text-gray-400">${goal.total}</p>
-          
-          <div className="w-full bg-gray-700 h-2 rounded-full mt-3">
-            <div 
-              className="bg-purple-500 h-2 rounded-full"
-              style={{ width: `${(goal.current / goal.target) * 100}%` }}
-            ></div>
-          </div>
-          
-          <div className="flex justify-between mt-2">
-            <span className="text-sm text-gray-400">${goal.current}</span>
-            <span className="text-sm text-gray-400">${goal.target - goal.current}</span>
-          </div>
-        </div>
-      ))}
+    <div className="p-4 max-w-md mx-auto pb-24 space-y-6">
+      {goals.length > 0 && (
+        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-finance-purple" />
+              Saving Goal
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            {goals.map((goal, index) => (
+              <div key={index} className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium text-lg">{goal.title}</h3>
+                  <span className="text-finance-purple font-bold">{formatCurrency(goal.total)}</span>
+                </div>
+                
+                <div className="w-full bg-gray-700 h-3 rounded-full">
+                  <div 
+                    className="bg-finance-purple h-3 rounded-full transition-all duration-500 ease-in-out"
+                    style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }}
+                  ></div>
+                </div>
+                
+                <div className="flex justify-between mt-2 text-sm">
+                  <span className="text-gray-300">Current: {formatCurrency(goal.current)}</span>
+                  <span className="text-gray-300">Remaining: {formatCurrency(goal.target - goal.current)}</span>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
       
-      <Card className="mb-6 bg-darkcard border-gray-700 text-white">
-        <CardHeader className="pb-2">
-          <div className="flex items-center space-x-2">
-            <CalendarDays className="h-5 w-5" />
-            <CardTitle>Calendar</CardTitle>
+      <Card className="mb-4 bg-darkcard border-gray-700 shadow-lg overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
+          <div className="flex items-center gap-2">
+            <CalendarDays className="h-5 w-5 text-finance-purple" />
+            <CardTitle className="text-lg">Financial Calendar</CardTitle>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={onSelectDate}
-            className="rounded-md border-gray-700 text-white"
+            className="rounded-md text-white"
             showOutsideDays={true}
             captionLayout="dropdown-buttons"
             fromYear={2020}
@@ -73,30 +97,61 @@ export function CalendarView({
               }
             }}
             modifiersStyles={{
-              marked: { color: '#8B5CF6', fontWeight: 'bold' }
+              marked: { 
+                color: 'white',
+                backgroundColor: '#8B5CF6',
+                borderRadius: '50%',
+              }
             }}
           />
         </CardContent>
       </Card>
       
       {transactions.length > 0 && (
-        <div className="card-dark">
-          <h3 className="font-medium mb-3">{formattedDate}</h3>
-          {transactions.map((tx, index) => (
-            <div key={index} className="flex justify-between items-center mb-2">
-              <span>{tx.category}</span>
-              <span className={tx.type === 'expense' ? 'text-red-400' : 'text-green-400'}>
-                {tx.type === 'expense' ? '-' : '+'}{formatCurrency(tx.amount)}
-              </span>
+        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">{formattedDate}</CardTitle>
+              <div className="flex gap-2">
+                {totalIncome > 0 && (
+                  <Badge className="bg-green-500 hover:bg-green-600">
+                    Income: {formatCurrency(totalIncome)}
+                  </Badge>
+                )}
+                {totalExpenses > 0 && (
+                  <Badge className="bg-red-500 hover:bg-red-600">
+                    Expenses: {formatCurrency(totalExpenses)}
+                  </Badge>
+                )}
+              </div>
             </div>
-          ))}
-        </div>
+          </CardHeader>
+          <CardContent className="divide-y divide-gray-700">
+            {transactions.map((tx, index) => (
+              <div key={index} className="flex justify-between items-center py-3 first:pt-2">
+                <div className="flex items-center gap-3">
+                  <div className={`w-2 h-2 rounded-full ${tx.type === 'expense' ? 'bg-red-400' : 'bg-green-400'}`}></div>
+                  <span>{tx.category}</span>
+                </div>
+                <span className={`font-medium ${tx.type === 'expense' ? 'text-red-400' : 'text-green-400'}`}>
+                  {tx.type === 'expense' ? '-' : '+'}{formatCurrency(tx.amount)}
+                </span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
       )}
       
       {transactions.length === 0 && selectedDate && (
-        <div className="card-dark text-center py-4">
-          <p className="text-gray-400">No transactions for {formattedDate}</p>
-        </div>
+        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
+          <CardHeader>
+            <CardTitle className="text-lg">{formattedDate}</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center py-8">
+            <p className="text-gray-400">No transactions for this date</p>
+            <p className="text-sm text-gray-500 mt-2">Select a date with transactions to view details</p>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
