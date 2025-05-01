@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
-import { Transaction } from "@/types";
+import { Transaction, SavingGoal } from "@/types";
 import { getTransactions, getSavingGoals } from "@/utils/storage";
 import { CalendarView } from "@/components/calendar/CalendarView";
 import { Toaster } from "@/components/ui/toaster";
@@ -38,7 +38,7 @@ export default function Calendar() {
     setCalendarTransactions(filtered);
   };
   
-  // Load saving goal for calendar
+  // Load saving goals for calendar
   const [goals, setGoals] = useState([]);
   
   useEffect(() => {
@@ -47,9 +47,10 @@ export default function Calendar() {
       title: goal.name,
       total: goal.targetAmount,
       current: goal.currentAmount,
-      target: goal.targetAmount
+      target: goal.targetAmount,
+      deadline: goal.deadline // Add deadline to display goals on calendar
     }));
-    setGoals(formattedGoals.slice(0, 1)); // Just show the first goal
+    setGoals(formattedGoals);
   }, []);
 
   const handleDateSelect = (newDate: Date | undefined) => {

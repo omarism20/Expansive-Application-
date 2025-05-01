@@ -2,7 +2,7 @@
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, CreditCard } from "lucide-react";
+import { CalendarDays, CreditCard, Goal } from "lucide-react";
 import { formatCurrency } from "@/utils/helpers";
 import { Badge } from "@/components/ui/badge";
 
@@ -11,6 +11,7 @@ interface GoalProgress {
   total: number;
   current: number;
   target: number;
+  deadline?: string; // Added deadline to show goals in calendar
 }
 
 interface CalendarViewProps {
@@ -27,6 +28,9 @@ export function CalendarView({
   transactions
 }: CalendarViewProps) {
   const formattedDate = selectedDate ? format(selectedDate, 'MMMM d, yyyy') : '';
+  
+  // Get the string representation of the selected date
+  const selectedDateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
 
   // Calculate total income and expenses for the selected date
   const selectedTransactions = transactions || [];
@@ -38,9 +42,89 @@ export function CalendarView({
     .filter(tx => tx.type === 'expense')
     .reduce((sum, tx) => sum + tx.amount, 0);
 
+  // Filter goals for the selected date
+  const goalsForSelectedDate = goals.filter(goal => goal.deadline === selectedDateStr);
+
   return (
     <div className="p-4 max-w-md mx-auto pb-24 space-y-6">
-      {goals.length > 0 && (
+      <Card className="mb-4 bg-darkcard border-gray-700 shadow-lg overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
+          <div className="flex items-center gap-2">
+            <CalendarDays className="h-5 w-5 text-finance-purple" />
+            <CardTitle className="text-lg">Financial Calendar</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={onSelectDate}
+            className="rounded-md text-white"
+            showOutsideDays={true}
+            captionLayout="dropdown-buttons"
+            fromYear={2020}
+            toYear={2030}
+            modifiers={{
+              marked: (date) => {
+                const dateStr = date.toISOString().split('T')[0];
+                const hasTransaction = transactions.some(tx => tx.date === dateStr);
+                const hasGoal = goals.some(goal => goal.deadline === dateStr);
+                return hasTransaction || hasGoal;
+              },
+              goal: (date) => {
+                const dateStr = date.toISOString().split('T')[0];
+                return goals.some(goal => goal.deadline === dateStr);
+              }
+            }}
+            modifiersStyles={{
+              marked: { 
+                color: 'white',
+                backgroundColor: '#8B5CF6',
+                borderRadius: '50%',
+              },
+              goal: {
+                border: '2px solid #22c55e',
+              }
+            }}
+          />
+        </CardContent>
+      </Card>
+      
+      {/* Display goals for selected date if any */}
+      {goalsForSelectedDate.length > 0 && (
+        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Goal className="h-5 w-5 text-finance-purple" />
+              Goals Due on {formattedDate}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4">
+            {goalsForSelectedDate.map((goal, index) => (
+              <div key={index} className="space-y-3 mb-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium text-lg">{goal.title}</h3>
+                  <span className="text-finance-purple font-bold">{formatCurrency(goal.total)}</span>
+                </div>
+                
+                <div className="w-full bg-gray-700 h-3 rounded-full">
+                  <div 
+                    className="bg-finance-purple h-3 rounded-full transition-all duration-500 ease-in-out"
+                    style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }}
+                  ></div>
+                </div>
+                
+                <div className="flex justify-between mt-2 text-sm">
+                  <span className="text-gray-300">Current: {formatCurrency(goal.current)}</span>
+                  <span className="text-gray-300">Remaining: {formatCurrency(goal.target - goal.current)}</span>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+      
+      {goals.length > 0 && goalsForSelectedDate.length === 0 && (
         <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -67,45 +151,18 @@ export function CalendarView({
                   <span className="text-gray-300">Current: {formatCurrency(goal.current)}</span>
                   <span className="text-gray-300">Remaining: {formatCurrency(goal.target - goal.current)}</span>
                 </div>
+                {goal.deadline && (
+                  <div className="text-right text-sm">
+                    <Badge className="bg-finance-blue hover:bg-finance-blue/90">
+                      Due: {format(new Date(goal.deadline), 'MMM d, yyyy')}
+                    </Badge>
+                  </div>
+                )}
               </div>
             ))}
           </CardContent>
         </Card>
       )}
-      
-      <Card className="mb-4 bg-darkcard border-gray-700 shadow-lg overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
-          <div className="flex items-center gap-2">
-            <CalendarDays className="h-5 w-5 text-finance-purple" />
-            <CardTitle className="text-lg">Financial Calendar</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-4">
-          <Calendar
-            mode="single"
-            selected={selectedDate}
-            onSelect={onSelectDate}
-            className="rounded-md text-white"
-            showOutsideDays={true}
-            captionLayout="dropdown-buttons"
-            fromYear={2020}
-            toYear={2030}
-            modifiers={{
-              marked: (date) => {
-                const dateStr = date.toISOString().split('T')[0];
-                return transactions.some(tx => tx.date === dateStr);
-              }
-            }}
-            modifiersStyles={{
-              marked: { 
-                color: 'white',
-                backgroundColor: '#8B5CF6',
-                borderRadius: '50%',
-              }
-            }}
-          />
-        </CardContent>
-      </Card>
       
       {transactions.length > 0 && (
         <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
@@ -142,14 +199,14 @@ export function CalendarView({
         </Card>
       )}
       
-      {transactions.length === 0 && selectedDate && (
+      {transactions.length === 0 && selectedDate && goalsForSelectedDate.length === 0 && (
         <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
           <CardHeader>
             <CardTitle className="text-lg">{formattedDate}</CardTitle>
           </CardHeader>
           <CardContent className="text-center py-8">
-            <p className="text-gray-300 text-base">No transactions for this date</p>
-            <p className="text-sm text-gray-400 mt-2">Select a date with transactions to view details</p>
+            <p className="text-gray-300 text-base">No transactions or goals for this date</p>
+            <p className="text-sm text-gray-400 mt-2">Select a date with transactions or goals to view details</p>
           </CardContent>
         </Card>
       )}
