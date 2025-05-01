@@ -1,7 +1,7 @@
 
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DayProps } from "react-day-picker";
 import { formatCurrency } from "@/utils/helpers";
 
 import { cn } from "@/lib/utils";
@@ -62,8 +62,7 @@ function Calendar({
       components={{
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-5 w-5" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-5 w-5" />,
-        Day: (props) => {
-          const date = props.date;
+        Day: ({ date, ...props }: DayProps & { children?: React.ReactNode }) => {
           const dateStr = date.toISOString().split('T')[0];
           const dayData = dailyTransactions?.get(dateStr);
           
