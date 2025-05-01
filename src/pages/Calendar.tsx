@@ -10,10 +10,21 @@ export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [calendarTransactions, setCalendarTransactions] = useState<any[]>([]);
+  const [allTransactions, setAllTransactions] = useState<any[]>([]);
   
   useEffect(() => {
     const storedTransactions = getTransactions();
     setTransactions(storedTransactions);
+    
+    // Transform all transactions for the calendar
+    const formattedTransactions = storedTransactions.map(tx => ({
+      date: tx.date,
+      category: tx.category,
+      amount: tx.amount,
+      type: tx.type
+    }));
+    
+    setAllTransactions(formattedTransactions);
     updateCalendarTransactions(storedTransactions);
   }, []);
   
@@ -66,7 +77,7 @@ export default function Calendar() {
           goals={goals}
           selectedDate={selectedDate}
           onSelectDate={handleDateSelect}
-          transactions={calendarTransactions}
+          transactions={allTransactions}
         />
       </main>
       

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, CreditCard, Goal } from "lucide-react";
 import { formatCurrency } from "@/utils/helpers";
 import { Badge } from "@/components/ui/badge";
+import { useMemo } from "react";
 
 interface GoalProgress {
   title: string;
@@ -45,6 +46,29 @@ export function CalendarView({
   // Filter goals for the selected date
   const goalsForSelectedDate = goals.filter(goal => goal.deadline === selectedDateStr);
 
+  // Prepare daily transaction data to display on calendar date cells
+  const dailyTransactionsMap = useMemo(() => {
+    const map = new Map();
+    
+    transactions.forEach(tx => {
+      if (!map.has(tx.date)) {
+        map.set(tx.date, { income: 0, expense: 0, net: 0 });
+      }
+      
+      const dayData = map.get(tx.date);
+      if (tx.type === 'income') {
+        dayData.income += tx.amount;
+      } else {
+        dayData.expense += tx.amount;
+      }
+      
+      dayData.net = dayData.income - dayData.expense;
+      map.set(tx.date, dayData);
+    });
+    
+    return map;
+  }, [transactions]);
+
   return (
     <div className="p-4 max-w-md mx-auto pb-24 space-y-6">
       <Card className="mb-4 bg-darkcard border-gray-700 shadow-lg overflow-hidden">
@@ -74,6 +98,16 @@ export function CalendarView({
               goal: (date) => {
                 const dateStr = date.toISOString().split('T')[0];
                 return goals.some(goal => goal.deadline === dateStr);
+              },
+              income: (date) => {
+                const dateStr = date.toISOString().split('T')[0];
+                const dayData = dailyTransactionsMap.get(dateStr);
+                return dayData && dayData.net > 0;
+              },
+              expense: (date) => {
+                const dateStr = date.toISOString().split('T')[0];
+                const dayData = dailyTransactionsMap.get(dateStr);
+                return dayData && dayData.net < 0;
               }
             }}
             modifiersStyles={{
@@ -84,8 +118,15 @@ export function CalendarView({
               },
               goal: {
                 border: '2px solid #22c55e',
+              },
+              income: {
+                color: '#22c55e',
+              },
+              expense: {
+                color: '#ef4444',
               }
             }}
+            dailyTransactions={dailyTransactionsMap}
           />
         </CardContent>
       </Card>
