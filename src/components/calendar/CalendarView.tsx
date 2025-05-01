@@ -131,9 +131,9 @@ export function CalendarView({
               <div key={index} className="flex justify-between items-center py-3 first:pt-2">
                 <div className="flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full ${tx.type === 'expense' ? 'bg-red-400' : 'bg-green-400'}`}></div>
-                  <span>{tx.category}</span>
+                  <span className="text-base">{tx.category}</span>
                 </div>
-                <span className={`font-medium ${tx.type === 'expense' ? 'text-red-400' : 'text-green-400'}`}>
+                <span className={`font-medium text-base ${tx.type === 'expense' ? 'text-red-400' : 'text-green-400'}`}>
                   {tx.type === 'expense' ? '-' : '+'}{formatCurrency(tx.amount)}
                 </span>
               </div>
@@ -148,8 +148,8 @@ export function CalendarView({
             <CardTitle className="text-lg">{formattedDate}</CardTitle>
           </CardHeader>
           <CardContent className="text-center py-8">
-            <p className="text-gray-400">No transactions for this date</p>
-            <p className="text-sm text-gray-500 mt-2">Select a date with transactions to view details</p>
+            <p className="text-gray-300 text-base">No transactions for this date</p>
+            <p className="text-sm text-gray-400 mt-2">Select a date with transactions to view details</p>
           </CardContent>
         </Card>
       )}
