@@ -78,16 +78,18 @@ function Calendar({
                 {props.children}
               </button>
               {dayData && (
-                <span className={cn(
-                  "text-[0.7rem] font-bold absolute bottom-0.5 px-1 py-0.5 rounded",
+                <div className={cn(
+                  "px-1.5 py-1 rounded text-center min-w-[42px] absolute -bottom-0.5",
                   dayData.net > 0 
-                    ? "bg-green-500/20 text-green-400 border border-green-400/30" 
+                    ? "bg-green-500/30 text-green-300 border border-green-500/40" 
                     : dayData.net < 0 
-                      ? "bg-red-500/20 text-red-400 border border-red-400/30" 
-                      : "bg-gray-500/20 text-gray-300 border border-gray-400/30"
+                      ? "bg-red-500/30 text-red-300 border border-red-500/40" 
+                      : "bg-gray-500/30 text-gray-300 border border-gray-500/40"
                 )}>
-                  {formatCurrency(Math.abs(dayData.net))}
-                </span>
+                  <span className="text-[0.78rem] font-bold block">
+                    {formatCurrency(Math.abs(dayData.net))}
+                  </span>
+                </div>
               )}
             </div>
           );
