@@ -39,15 +39,15 @@ function Calendar({
         head_cell:
           "text-muted-foreground rounded-md w-10 font-medium text-[0.9rem]",
         row: "flex w-full mt-2",
-        cell: "h-10 w-10 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+        cell: "h-12 w-12 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-10 w-10 p-0 pb-6 font-normal text-[0.95rem] relative aria-selected:opacity-100"
+          "h-10 w-10 p-0 pb-6 font-normal text-[1rem] relative aria-selected:opacity-100"
         ),
         day_range_end: "day-range-end",
         day_selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent/20 text-accent-foreground font-semibold",
+        day_today: "bg-accent/30 text-accent-foreground font-bold",
         day_outside:
           "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
         day_disabled: "text-muted-foreground opacity-50",
@@ -72,21 +72,22 @@ function Calendar({
                 {...props} 
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  "h-10 w-10 p-0 font-normal text-[0.95rem] aria-selected:opacity-100 mb-1"
+                  "h-10 w-10 p-0 font-semibold text-[1.1rem] aria-selected:opacity-100 mb-1 border-2 border-transparent hover:border-gray-400/50 bg-darkcard/50 shadow-sm",
+                  props["aria-selected"] && "border-2 border-finance-purple bg-finance-purple/20"
                 )}
               >
                 {props.children}
               </button>
               {dayData && (
                 <div className={cn(
-                  "px-2 py-1.5 rounded-md text-center min-w-[50px] absolute -bottom-1 shadow-md",
+                  "px-2 py-1.5 rounded-md text-center min-w-[55px] absolute -bottom-1 shadow-lg",
                   dayData.net > 0 
-                    ? "bg-green-500/70 text-white border-2 border-green-400" 
+                    ? "bg-green-500/90 text-white border-2 border-green-400" 
                     : dayData.net < 0 
-                      ? "bg-red-500/70 text-white border-2 border-red-400" 
-                      : "bg-gray-500/70 text-white border-2 border-gray-400"
+                      ? "bg-red-500/90 text-white border-2 border-red-400" 
+                      : "bg-gray-500/90 text-white border-2 border-gray-400"
                 )}>
-                  <span className="text-[0.9rem] font-extrabold block">
+                  <span className="text-[0.95rem] font-extrabold block">
                     {formatCurrency(Math.abs(dayData.net))}
                   </span>
                 </div>

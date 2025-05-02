@@ -33,8 +33,10 @@ export function CalendarView({
   // Get the string representation of the selected date
   const selectedDateStr = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
 
+  // Filter transactions for the selected date
+  const selectedTransactions = transactions.filter(tx => tx.date === selectedDateStr) || [];
+  
   // Calculate total income and expenses for the selected date
-  const selectedTransactions = transactions || [];
   const totalIncome = selectedTransactions
     .filter(tx => tx.type === 'income')
     .reduce((sum, tx) => sum + tx.amount, 0);
@@ -71,14 +73,14 @@ export function CalendarView({
 
   return (
     <div className="p-4 max-w-md mx-auto pb-24 space-y-6">
-      <Card className="mb-4 bg-darkcard border-gray-700 shadow-lg overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
+      <Card className="mb-4 bg-darkcard border-gray-700 shadow-xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20 pb-2">
           <div className="flex items-center gap-2">
             <CalendarDays className="h-5 w-5 text-finance-purple" />
             <CardTitle className="text-lg">Financial Calendar</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="pt-4">
+        <CardContent className="pt-4 bg-gradient-to-b from-darkcard/90 to-darkcard">
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -133,8 +135,8 @@ export function CalendarView({
       
       {/* Display goals for selected date if any */}
       {goalsForSelectedDate.length > 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
+        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20 pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
               <Goal className="h-5 w-5 text-finance-purple" />
               Goals Due on {formattedDate}
@@ -165,9 +167,10 @@ export function CalendarView({
         </Card>
       )}
       
+      {/* Display goals if not showing goals for selected date */}
       {goals.length > 0 && goalsForSelectedDate.length === 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 pb-2">
+        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20 pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
               <CreditCard className="h-5 w-5 text-finance-purple" />
               Saving Goal
@@ -205,9 +208,10 @@ export function CalendarView({
         </Card>
       )}
       
-      {transactions.length > 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10">
+      {/* Display transactions for selected date */}
+      {selectedTransactions.length > 0 && (
+        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">{formattedDate}</CardTitle>
               <div className="flex gap-2">
@@ -225,7 +229,7 @@ export function CalendarView({
             </div>
           </CardHeader>
           <CardContent className="divide-y divide-gray-700">
-            {transactions.map((tx, index) => (
+            {selectedTransactions.map((tx, index) => (
               <div key={index} className="flex justify-between items-center py-3 first:pt-2">
                 <div className="flex items-center gap-3">
                   <div className={`w-2 h-2 rounded-full ${tx.type === 'expense' ? 'bg-red-400' : 'bg-green-400'}`}></div>
@@ -240,8 +244,9 @@ export function CalendarView({
         </Card>
       )}
       
-      {transactions.length === 0 && selectedDate && goalsForSelectedDate.length === 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-lg overflow-hidden">
+      {/* Show message if no transactions for selected date */}
+      {selectedTransactions.length === 0 && selectedDate && goalsForSelectedDate.length === 0 && (
+        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
           <CardHeader>
             <CardTitle className="text-lg">{formattedDate}</CardTitle>
           </CardHeader>

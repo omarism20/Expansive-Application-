@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -16,6 +16,29 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
   const [selectedDateTransactions, setSelectedDateTransactions] = useState<Transaction[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  // Prepare daily transaction data to display on calendar date cells
+  const dailyTransactionsMap = useMemo(() => {
+    const map = new Map();
+    
+    transactions.forEach(tx => {
+      if (!map.has(tx.date)) {
+        map.set(tx.date, { income: 0, expense: 0, net: 0 });
+      }
+      
+      const dayData = map.get(tx.date);
+      if (tx.type === 'income') {
+        dayData.income += tx.amount;
+      } else {
+        dayData.expense += tx.amount;
+      }
+      
+      dayData.net = dayData.income - dayData.expense;
+      map.set(tx.date, dayData);
+    });
+    
+    return map;
+  }, [transactions]);
+
   const handleSelect = (date: Date | undefined) => {
     if (!date) return;
     
@@ -31,11 +54,11 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
     <Card className="col-span-full">
       <CardHeader>
         <div className="flex items-center space-x-2">
-          <CalendarDays className="h-5 w-5" />
+          <CalendarDays className="h-5 w-5 text-finance-purple" />
           <CardTitle>Transaction Calendar</CardTitle>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="bg-gradient-to-b from-darkcard/20 to-darkcard/10 p-4 rounded-b-lg">
         <Calendar
           mode="single"
           selected={selectedDate}
@@ -51,14 +74,19 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
             }
           }}
           modifiersStyles={{
-            marked: { color: '#8B5CF6', fontWeight: 'bold' }
+            marked: { 
+              color: '#fff',
+              backgroundColor: '#8B5CF6',
+              fontWeight: 'bold'
+            }
           }}
+          dailyTransactions={dailyTransactionsMap}
         />
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent>
+          <DialogContent className="bg-darkcard text-white border-gray-700">
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle className="text-lg text-white">
                 Transactions for {selectedDate ? formatDate(selectedDate.toISOString()) : ''}
               </DialogTitle>
               <DialogDescription>
@@ -73,10 +101,10 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
                   {selectedDateTransactions.map((tx) => (
                     <div
                       key={tx.id}
-                      className="flex justify-between items-center p-3 rounded-lg border"
+                      className="flex justify-between items-center p-3 rounded-lg border border-gray-700 bg-darkbg"
                     >
                       <div>
-                        <p className="font-medium">{tx.description}</p>
+                        <p className="font-medium">{tx.description || tx.category}</p>
                         <p className="text-sm text-muted-foreground">
                           {tx.category}
                         </p>
