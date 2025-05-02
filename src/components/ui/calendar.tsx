@@ -79,14 +79,14 @@ function Calendar({
               </button>
               {dayData && (
                 <div className={cn(
-                  "px-1.5 py-1 rounded text-center min-w-[42px] absolute -bottom-0.5",
+                  "px-2 py-1 rounded-md text-center min-w-[46px] absolute -bottom-1 shadow-sm",
                   dayData.net > 0 
-                    ? "bg-green-500/30 text-green-300 border border-green-500/40" 
+                    ? "bg-green-500/50 text-white border border-green-400" 
                     : dayData.net < 0 
-                      ? "bg-red-500/30 text-red-300 border border-red-500/40" 
-                      : "bg-gray-500/30 text-gray-300 border border-gray-500/40"
+                      ? "bg-red-500/50 text-white border border-red-400" 
+                      : "bg-gray-500/50 text-white border border-gray-400"
                 )}>
-                  <span className="text-[0.78rem] font-bold block">
+                  <span className="text-[0.85rem] font-bold block">
                     {formatCurrency(Math.abs(dayData.net))}
                   </span>
                 </div>
