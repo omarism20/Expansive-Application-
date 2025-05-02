@@ -12,7 +12,7 @@ interface GoalProgress {
   total: number;
   current: number;
   target: number;
-  deadline?: string; // Added deadline to show goals in calendar
+  deadline?: string;
 }
 
 interface CalendarViewProps {
@@ -113,19 +113,8 @@ export function CalendarView({
               }
             }}
             modifiersStyles={{
-              marked: { 
-                color: 'white',
-                backgroundColor: '#8B5CF6',
-                borderRadius: '50%',
-              },
               goal: {
                 border: '2px solid #22c55e',
-              },
-              income: {
-                color: '#22c55e',
-              },
-              expense: {
-                color: '#ef4444',
               }
             }}
             dailyTransactions={dailyTransactionsMap}

@@ -52,7 +52,7 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
 
   return (
     <Card className="col-span-full">
-      <CardHeader>
+      <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10 rounded-t-lg">
         <div className="flex items-center space-x-2">
           <CalendarDays className="h-5 w-5 text-finance-purple" />
           <CardTitle>Transaction Calendar</CardTitle>
@@ -63,7 +63,7 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
           mode="single"
           selected={selectedDate}
           onSelect={handleSelect}
-          className="rounded-md border"
+          className="rounded-md border border-gray-700"
           captionLayout="dropdown-buttons"
           fromYear={2020}
           toYear={2030}
@@ -75,8 +75,6 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
           }}
           modifiersStyles={{
             marked: { 
-              color: '#fff',
-              backgroundColor: '#8B5CF6',
               fontWeight: 'bold'
             }
           }}
@@ -84,24 +82,24 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
         />
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="bg-darkcard text-white border-gray-700">
+          <DialogContent className="bg-darkcard text-white border border-gray-700 shadow-xl">
             <DialogHeader>
-              <DialogTitle className="text-lg text-white">
+              <DialogTitle className="text-lg font-bold text-white">
                 Transactions for {selectedDate ? formatDate(selectedDate.toISOString()) : ''}
               </DialogTitle>
-              <DialogDescription>
+              <DialogDescription className="text-gray-300">
                 View all transactions for this date
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
               {selectedDateTransactions.length === 0 ? (
-                <p className="text-muted-foreground">No transactions for this date</p>
+                <p className="text-muted-foreground text-center py-4">No transactions for this date</p>
               ) : (
                 <div className="space-y-3">
                   {selectedDateTransactions.map((tx) => (
                     <div
                       key={tx.id}
-                      className="flex justify-between items-center p-3 rounded-lg border border-gray-700 bg-darkbg"
+                      className="flex justify-between items-center p-3 rounded-lg border border-gray-700 bg-darkbg hover:bg-darkbg/80 transition-colors"
                     >
                       <div>
                         <p className="font-medium">{tx.description || tx.category}</p>
@@ -110,7 +108,7 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
                         </p>
                       </div>
                       <p
-                        className={tx.type === 'expense' ? 'text-red-500' : 'text-green-500'}
+                        className={tx.type === 'expense' ? 'text-red-400 font-semibold' : 'text-green-400 font-semibold'}
                       >
                         {tx.type === 'expense' ? '-' : '+'}
                         {formatCurrency(tx.amount)}
