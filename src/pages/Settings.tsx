@@ -8,6 +8,7 @@ import { SecurityModal } from "@/components/settings/SecurityModal";
 import { CurrencyCode } from "@/types";
 import { getSettings, saveSettings, AppSettings } from "@/utils/storage";
 import { Toaster } from "@/components/ui/toaster";
+import { toast } from "@/hooks/use-toast";
 
 export default function Settings() {
   const [settings, setSettings] = useState<AppSettings>(getSettings());
@@ -28,6 +29,11 @@ export default function Settings() {
     const updatedSettings = { ...settings, currency };
     setSettings(updatedSettings);
     saveSettings(updatedSettings);
+    
+    toast({
+      title: "Currency Updated",
+      description: `Your currency has been changed to ${currency}`
+    });
   };
   
   const handleThemeChange = (theme: string) => {
@@ -41,18 +47,33 @@ export default function Settings() {
     } else {
       document.documentElement.classList.remove('dark');
     }
+    
+    toast({
+      title: "Theme Updated",
+      description: `Your theme has been changed to ${theme}`
+    });
   };
   
   const handleSecurityChange = (security: string, securityValue: string) => {
     const updatedSettings = { ...settings, security, securityValue };
     setSettings(updatedSettings);
     saveSettings(updatedSettings);
+    
+    toast({
+      title: "Security Settings Updated",
+      description: `Your security option has been changed to ${security}`
+    });
   };
   
   const handleNotificationsToggle = (value: boolean) => {
     const updatedSettings = { ...settings, notifications: value };
     setSettings(updatedSettings);
     saveSettings(updatedSettings);
+    
+    toast({
+      title: "Notifications Setting Updated",
+      description: value ? "Notifications have been enabled" : "Notifications have been disabled"
+    });
   };
 
   return (
@@ -92,8 +113,6 @@ export default function Settings() {
           currentSecurityValue={settings.securityValue}
           onSave={handleSecurityChange}
         />
-
-        <Toaster />
       </main>
     </div>
   );
