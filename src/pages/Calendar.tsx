@@ -67,7 +67,7 @@ export default function Calendar() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen">
       <main className="pb-24">
         <CalendarView
           goals={goals}

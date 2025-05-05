@@ -73,22 +73,22 @@ export function CalendarView({
   }, [transactions]);
 
   return (
-    <div className="pb-24 space-y-6 bg-black">
-      <div className="mb-4 bg-black text-white p-4 flex items-center">
+    <div className="pb-24 space-y-6">
+      <div className="mb-4 p-4 flex items-center">
         <Link to="/" className="mr-auto">
-          <ChevronLeft className="h-6 w-6 text-red-500" />
+          <ChevronLeft className="h-6 w-6" />
         </Link>
         <h1 className="text-xl font-bold mx-auto">{selectedDate ? format(selectedDate, 'yyyy') : new Date().getFullYear()}</h1>
         <div className="ml-auto w-6"></div> {/* Empty div for alignment */}
       </div>
       
-      <Card className="mb-4 bg-black border-0 shadow-none overflow-hidden">
-        <CardContent className="pt-4 pb-0 bg-black">
+      <Card className="mb-4 bg-card shadow-md overflow-hidden">
+        <CardContent className="pt-4 pb-0">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={onSelectDate}
-            className="rounded-md text-white"
+            className="rounded-md"
             showOutsideDays={true}
             captionLayout="dropdown-buttons"
             fromYear={2020}
@@ -108,30 +108,30 @@ export function CalendarView({
       
       {/* Display transactions for selected date */}
       {selectedTransactions.length > 0 && (
-        <Card className="bg-black border-t border-gray-800 shadow-none rounded-none">
-          <CardHeader className="border-b border-gray-800 pb-4">
+        <Card className="bg-card shadow-md">
+          <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg flex items-center gap-2">
-                <BarChart className="h-5 w-5 text-red-500" />
+                <BarChart className="h-5 w-5" />
                 <span>{formattedDate}</span>
               </CardTitle>
               <div className="flex gap-2">
                 {totalIncome > 0 && (
-                  <Badge className="bg-green-600 hover:bg-green-700 text-xs px-2 py-1">
+                  <Badge className="bg-green-600 hover:bg-green-700">
                     <DollarSign className="h-3 w-3 mr-1" /> {formatCurrency(totalIncome)}
                   </Badge>
                 )}
                 {totalExpenses > 0 && (
-                  <Badge className="bg-red-500 hover:bg-red-600 text-xs px-2 py-1">
+                  <Badge className="bg-red-500 hover:bg-red-600">
                     <DollarSign className="h-3 w-3 mr-1" /> {formatCurrency(totalExpenses)}
                   </Badge>
                 )}
               </div>
             </div>
           </CardHeader>
-          <CardContent className="divide-y divide-gray-800">
+          <CardContent className="divide-y">
             {selectedTransactions.map((tx, index) => (
-              <div key={index} className="flex justify-between items-center py-3 first:pt-4 hover:bg-gray-900 px-2 rounded-md transition-colors">
+              <div key={index} className="flex justify-between items-center py-3 hover:bg-secondary/10 px-2 rounded-md transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={`w-3 h-3 rounded-full ${tx.type === 'expense' ? 'bg-red-400' : 'bg-green-400'} shadow-lg`}></div>
                   <span className="text-base font-medium">{tx.category}</span>
@@ -147,22 +147,22 @@ export function CalendarView({
       
       {/* Display goals for selected date if any */}
       {goalsForSelectedDate.length > 0 && (
-        <Card className="bg-black border-t border-gray-800 shadow-none rounded-none">
-          <CardHeader className="border-b border-gray-800 pb-4">
+        <Card className="bg-card shadow-md">
+          <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <Goal className="h-5 w-5 text-red-500" />
+              <Goal className="h-5 w-5" />
               Goals Due on {formattedDate}
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
             {goalsForSelectedDate.map((goal, index) => (
-              <div key={index} className="space-y-3 mb-4 bg-gray-900/30 p-3 rounded-lg border border-gray-800">
+              <div key={index} className="space-y-3 mb-4 bg-secondary/10 p-3 rounded-lg">
                 <div className="flex justify-between items-center">
                   <h3 className="font-medium text-lg">{goal.title}</h3>
                   <span className="text-green-400 font-bold">{formatCurrency(goal.total)}</span>
                 </div>
                 
-                <div className="w-full bg-gray-800 h-3 rounded-full">
+                <div className="w-full bg-secondary h-3 rounded-full">
                   <div 
                     className="bg-green-600 h-3 rounded-full transition-all duration-500 ease-in-out"
                     style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }}
@@ -170,8 +170,8 @@ export function CalendarView({
                 </div>
                 
                 <div className="flex justify-between mt-2 text-sm">
-                  <span className="text-gray-400">Current: {formatCurrency(goal.current)}</span>
-                  <span className="text-gray-400">Remaining: {formatCurrency(goal.target - goal.current)}</span>
+                  <span className="text-muted-foreground">Current: {formatCurrency(goal.current)}</span>
+                  <span className="text-muted-foreground">Remaining: {formatCurrency(goal.target - goal.current)}</span>
                 </div>
               </div>
             ))}
@@ -181,26 +181,26 @@ export function CalendarView({
       
       {/* Show message if no transactions for selected date */}
       {selectedTransactions.length === 0 && selectedDate && goalsForSelectedDate.length === 0 && (
-        <Card className="bg-black border-t border-gray-800 shadow-none rounded-none">
-          <CardHeader className="border-b border-gray-800 pb-4">
+        <Card className="bg-card shadow-md">
+          <CardHeader>
             <CardTitle className="text-lg">{formattedDate}</CardTitle>
           </CardHeader>
           <CardContent className="text-center py-8">
-            <p className="text-gray-400 text-base">No transactions or goals for this date</p>
-            <p className="text-sm text-gray-500 mt-2">Select a date with transactions or goals to view details</p>
+            <p className="text-muted-foreground text-base">No transactions or goals for this date</p>
+            <p className="text-sm text-muted-foreground/70 mt-2">Select a date with transactions or goals to view details</p>
           </CardContent>
         </Card>
       )}
       
-      {/* Bottom navigation similar to iOS Calendar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 flex justify-around p-4">
-        <button className="text-red-500 flex flex-col items-center">
+      {/* Bottom navigation */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t flex justify-around p-4">
+        <button className="text-primary flex flex-col items-center">
           <span>Today</span>
         </button>
-        <button className="text-red-500 flex flex-col items-center">
+        <button className="text-primary flex flex-col items-center">
           <span>Calendars</span>
         </button>
-        <button className="text-red-500 flex flex-col items-center">
+        <button className="text-primary flex flex-col items-center">
           <span>Inbox</span>
         </button>
       </div>
