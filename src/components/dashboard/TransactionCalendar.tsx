@@ -5,7 +5,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Transaction } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/helpers";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, DollarSign } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface TransactionCalendarProps {
   transactions: Transaction[];
@@ -38,6 +39,20 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
     
     return map;
   }, [transactions]);
+
+  // Calculate totals for the selected date
+  const totals = useMemo(() => {
+    if (!selectedDate || !selectedDateTransactions.length) return { income: 0, expense: 0 };
+    
+    return selectedDateTransactions.reduce((acc, tx) => {
+      if (tx.type === 'income') {
+        acc.income += tx.amount;
+      } else {
+        acc.expense += tx.amount;
+      }
+      return acc;
+    }, { income: 0, expense: 0 });
+  }, [selectedDate, selectedDateTransactions]);
 
   const handleSelect = (date: Date | undefined) => {
     if (!date) return;
@@ -82,20 +97,30 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
         />
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="bg-darkcard text-white border border-gray-700 shadow-xl">
-            <DialogHeader>
-              <DialogTitle className="text-lg font-bold text-white">
-                Transactions for {selectedDate ? formatDate(selectedDate.toISOString()) : ''}
+          <DialogContent className="bg-darkcard text-white border border-gray-700 shadow-xl max-w-md">
+            <DialogHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20 rounded-t-lg p-4 -m-4 mb-0">
+              <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
+                <CalendarDays className="h-5 w-5" />
+                {selectedDate ? formatDate(selectedDate.toISOString()) : ''}
               </DialogTitle>
-              <DialogDescription className="text-gray-300">
-                View all transactions for this date
+              <DialogDescription className="text-gray-200 flex gap-3 mt-2">
+                {totals.income > 0 && (
+                  <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500 flex items-center">
+                    <DollarSign className="h-3 w-3 mr-1" /> Income: {formatCurrency(totals.income)}
+                  </Badge>
+                )}
+                {totals.expense > 0 && (
+                  <Badge variant="outline" className="bg-red-500/20 text-red-300 border-red-500 flex items-center">
+                    <DollarSign className="h-3 w-3 mr-1" /> Expenses: {formatCurrency(totals.expense)}
+                  </Badge>
+                )}
               </DialogDescription>
             </DialogHeader>
-            <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+            <div className="space-y-4 max-h-[60vh] overflow-y-auto pt-2">
               {selectedDateTransactions.length === 0 ? (
                 <p className="text-muted-foreground text-center py-4">No transactions for this date</p>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {selectedDateTransactions.map((tx) => (
                     <div
                       key={tx.id}
@@ -108,7 +133,7 @@ export function TransactionCalendar({ transactions }: TransactionCalendarProps) 
                         </p>
                       </div>
                       <p
-                        className={tx.type === 'expense' ? 'text-red-400 font-semibold' : 'text-green-400 font-semibold'}
+                        className={`${tx.type === 'expense' ? 'text-red-400' : 'text-green-400'} font-semibold text-lg`}
                       >
                         {tx.type === 'expense' ? '-' : '+'}
                         {formatCurrency(tx.amount)}

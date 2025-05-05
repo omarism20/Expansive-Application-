@@ -46,8 +46,8 @@ function Calendar({
         ),
         day_range_end: "day-range-end",
         day_selected:
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent/30 text-accent-foreground font-bold",
+          "bg-finance-purple text-white hover:bg-finance-purple hover:text-white focus:bg-finance-purple focus:text-white shadow-lg",
+        day_today: "bg-finance-blue/20 text-white font-bold border border-finance-blue/50",
         day_outside:
           "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
         day_disabled: "text-muted-foreground opacity-50",
@@ -72,7 +72,7 @@ function Calendar({
                 {...props} 
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  "h-11 w-11 p-0 font-semibold text-[1.15rem] aria-selected:opacity-100 mb-1.5 border-2 border-transparent hover:border-gray-400/50 bg-darkcard/70 shadow-md rounded-lg",
+                  "h-12 w-12 p-0 font-semibold text-[1.2rem] aria-selected:opacity-100 mb-2 border-2 border-transparent hover:border-gray-400/50 bg-darkcard/70 shadow-md rounded-lg",
                   props["aria-selected"] && "border-2 border-finance-purple bg-finance-purple/20"
                 )}
               >
@@ -80,12 +80,12 @@ function Calendar({
               </button>
               {dayData && (
                 <div className={cn(
-                  "px-2 py-1 rounded-md text-center min-w-[58px] absolute -bottom-1 shadow-lg transition-all duration-200 ease-in-out scale-100 hover:scale-105",
+                  "px-2 py-0.5 rounded-md text-center min-w-[58px] absolute -bottom-1 shadow-lg transition-all duration-200 ease-in-out scale-100 hover:scale-105",
                   dayData.net > 0 
-                    ? "bg-green-500/80 text-white border border-green-400" 
+                    ? "bg-green-500/90 text-white border border-green-400 font-medium" 
                     : dayData.net < 0 
-                      ? "bg-red-500/80 text-white border border-red-400" 
-                      : "bg-gray-500/80 text-white border border-gray-400"
+                      ? "bg-red-500/90 text-white border border-red-400 font-medium" 
+                      : "bg-gray-500/90 text-white border border-gray-400 font-medium"
                 )}>
                   <span className="text-[0.95rem] font-extrabold block">
                     {formatCurrency(Math.abs(dayData.net))}

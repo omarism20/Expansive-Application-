@@ -2,7 +2,7 @@
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, CreditCard, Goal } from "lucide-react";
+import { CalendarDays, CreditCard, Goal, DollarSign, BarChart } from "lucide-react";
 import { formatCurrency } from "@/utils/helpers";
 import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
@@ -73,8 +73,8 @@ export function CalendarView({
 
   return (
     <div className="p-4 max-w-md mx-auto pb-24 space-y-6">
-      <Card className="mb-4 bg-darkcard border-gray-700 shadow-xl overflow-hidden">
-        <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20 pb-2">
+      <Card className="mb-4 bg-darkcard border border-gray-700 shadow-xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-finance-purple/40 to-finance-blue/30 pb-2">
           <div className="flex items-center gap-2">
             <CalendarDays className="h-5 w-5 text-finance-purple" />
             <CardTitle className="text-lg">Financial Calendar</CardTitle>
@@ -124,24 +124,24 @@ export function CalendarView({
       
       {/* Display goals for selected date if any */}
       {goalsForSelectedDate.length > 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
-          <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20 pb-2">
+        <Card className="bg-darkcard border border-gray-700 shadow-xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-green/30 to-finance-blue/20 pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Goal className="h-5 w-5 text-finance-purple" />
+              <Goal className="h-5 w-5 text-green-400" />
               Goals Due on {formattedDate}
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
             {goalsForSelectedDate.map((goal, index) => (
-              <div key={index} className="space-y-3 mb-4">
+              <div key={index} className="space-y-3 mb-4 bg-darkbg/30 p-3 rounded-lg border border-gray-700">
                 <div className="flex justify-between items-center">
                   <h3 className="font-medium text-lg">{goal.title}</h3>
-                  <span className="text-finance-purple font-bold">{formatCurrency(goal.total)}</span>
+                  <span className="text-finance-green font-bold">{formatCurrency(goal.total)}</span>
                 </div>
                 
                 <div className="w-full bg-gray-700 h-3 rounded-full">
                   <div 
-                    className="bg-finance-purple h-3 rounded-full transition-all duration-500 ease-in-out"
+                    className="bg-finance-green h-3 rounded-full transition-all duration-500 ease-in-out"
                     style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }}
                   ></div>
                 </div>
@@ -158,16 +158,16 @@ export function CalendarView({
       
       {/* Display goals if not showing goals for selected date */}
       {goals.length > 0 && goalsForSelectedDate.length === 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
+        <Card className="bg-darkcard border border-gray-700 shadow-xl overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20 pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
-              <CreditCard className="h-5 w-5 text-finance-purple" />
+              <Goal className="h-5 w-5 text-finance-purple" />
               Saving Goal
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
             {goals.map((goal, index) => (
-              <div key={index} className="space-y-3">
+              <div key={index} className="space-y-3 bg-darkbg/30 p-3 rounded-lg border border-gray-700 mb-3">
                 <div className="flex justify-between items-center">
                   <h3 className="font-medium text-lg">{goal.title}</h3>
                   <span className="text-finance-purple font-bold">{formatCurrency(goal.total)}</span>
@@ -199,19 +199,22 @@ export function CalendarView({
       
       {/* Display transactions for selected date */}
       {selectedTransactions.length > 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
+        <Card className="bg-darkcard border border-gray-700 shadow-xl overflow-hidden">
           <CardHeader className="bg-gradient-to-r from-finance-purple/30 to-finance-blue/20">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">{formattedDate}</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <BarChart className="h-5 w-5 text-finance-purple" />
+                <span>{formattedDate}</span>
+              </CardTitle>
               <div className="flex gap-2">
                 {totalIncome > 0 && (
-                  <Badge className="bg-green-500 hover:bg-green-600">
-                    Income: {formatCurrency(totalIncome)}
+                  <Badge className="bg-green-500 hover:bg-green-600 text-xs px-2 py-1">
+                    <DollarSign className="h-3 w-3 mr-1" /> {formatCurrency(totalIncome)}
                   </Badge>
                 )}
                 {totalExpenses > 0 && (
-                  <Badge className="bg-red-500 hover:bg-red-600">
-                    Expenses: {formatCurrency(totalExpenses)}
+                  <Badge className="bg-red-500 hover:bg-red-600 text-xs px-2 py-1">
+                    <DollarSign className="h-3 w-3 mr-1" /> {formatCurrency(totalExpenses)}
                   </Badge>
                 )}
               </div>
@@ -219,12 +222,12 @@ export function CalendarView({
           </CardHeader>
           <CardContent className="divide-y divide-gray-700">
             {selectedTransactions.map((tx, index) => (
-              <div key={index} className="flex justify-between items-center py-3 first:pt-2">
+              <div key={index} className="flex justify-between items-center py-3 first:pt-2 hover:bg-darkbg/30 px-2 rounded-md transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className={`w-2 h-2 rounded-full ${tx.type === 'expense' ? 'bg-red-400' : 'bg-green-400'}`}></div>
-                  <span className="text-base">{tx.category}</span>
+                  <div className={`w-3 h-3 rounded-full ${tx.type === 'expense' ? 'bg-red-400' : 'bg-green-400'} shadow-lg`}></div>
+                  <span className="text-base font-medium">{tx.category}</span>
                 </div>
-                <span className={`font-medium text-base ${tx.type === 'expense' ? 'text-red-400' : 'text-green-400'}`}>
+                <span className={`font-semibold text-base ${tx.type === 'expense' ? 'text-red-400' : 'text-green-400'}`}>
                   {tx.type === 'expense' ? '-' : '+'}{formatCurrency(tx.amount)}
                 </span>
               </div>
@@ -235,8 +238,8 @@ export function CalendarView({
       
       {/* Show message if no transactions for selected date */}
       {selectedTransactions.length === 0 && selectedDate && goalsForSelectedDate.length === 0 && (
-        <Card className="bg-darkcard border-gray-700 shadow-xl overflow-hidden">
-          <CardHeader>
+        <Card className="bg-darkcard border border-gray-700 shadow-xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-finance-purple/20 to-finance-blue/10">
             <CardTitle className="text-lg">{formattedDate}</CardTitle>
           </CardHeader>
           <CardContent className="text-center py-8">
