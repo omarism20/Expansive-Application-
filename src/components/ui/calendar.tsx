@@ -76,7 +76,10 @@ function Calendar({
                   props["aria-selected"] && "border-2 border-finance-purple bg-finance-purple/20"
                 )}
               >
-                {props.children}
+                {/* Ensure day number is always visible even with transactions */}
+                <span className="inline-flex justify-center items-center text-white font-medium">
+                  {props.children}
+                </span>
               </button>
               {dayData && (
                 <div className={cn(
