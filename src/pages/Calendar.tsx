@@ -1,14 +1,12 @@
 
 import { useState, useEffect } from "react";
-import Header from "@/components/layout/Header";
-import { Transaction, SavingGoal } from "@/types";
 import { getTransactions, getSavingGoals } from "@/utils/storage";
 import { CalendarView } from "@/components/calendar/CalendarView";
 import { Toaster } from "@/components/ui/toaster";
 
 export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<any[]>([]);
   const [calendarTransactions, setCalendarTransactions] = useState<any[]>([]);
   const [allTransactions, setAllTransactions] = useState<any[]>([]);
   
@@ -35,7 +33,7 @@ export default function Calendar() {
     }
   }, [selectedDate, transactions]);
   
-  const updateCalendarTransactions = (allTransactions: Transaction[], date: Date = new Date()) => {
+  const updateCalendarTransactions = (allTransactions: any[], date: Date = new Date()) => {
     const selectedDateStr = date.toISOString().split('T')[0];
     
     const filtered = allTransactions.filter(tx => tx.date === selectedDateStr)
@@ -59,7 +57,7 @@ export default function Calendar() {
       total: goal.targetAmount,
       current: goal.currentAmount,
       target: goal.targetAmount,
-      deadline: goal.deadline // Add deadline to display goals on calendar
+      deadline: goal.deadline
     }));
     setGoals(formattedGoals);
   }, []);
@@ -69,9 +67,7 @@ export default function Calendar() {
   };
 
   return (
-    <div className="min-h-screen bg-darkbg text-white">
-      <Header />
-      
+    <div className="min-h-screen bg-black text-white">
       <main className="pb-24">
         <CalendarView
           goals={goals}
