@@ -59,23 +59,23 @@ function Calendar({
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
-        Day: ({ date, ...props }: DayProps) => {
+        Day: ({ date, ...dayProps }: DayProps) => {
           const dateStr = date.toISOString().split('T')[0];
           const dayData = dailyTransactions?.get(dateStr);
           
           return (
             <div className="flex flex-col items-center">
               <button 
-                {...props} 
+                {...dayProps} 
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
                   "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
-                  props["aria-selected"] ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground" : "",
+                  dayProps["aria-selected"] ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground" : "",
                   "relative"
                 )}
               >
                 <span className="absolute inset-0 flex items-center justify-center">
-                  {props.children}
+                  {dayProps.children}
                 </span>
               </button>
               
