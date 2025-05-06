@@ -75,7 +75,8 @@ function Calendar({
                 )}
               >
                 <span className="absolute inset-0 flex items-center justify-center">
-                  {dayProps.children}
+                  {/* Fix: Access the day number directly from the date object */}
+                  {date.getDate()}
                 </span>
               </button>
               
