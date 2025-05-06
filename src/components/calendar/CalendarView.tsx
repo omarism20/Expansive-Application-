@@ -82,13 +82,13 @@ export function CalendarView({
         <div className="ml-auto w-6"></div> {/* Empty div for alignment */}
       </div>
       
-      <Card className="mb-4 bg-card shadow-md overflow-hidden">
-        <CardContent className="pt-4 pb-0">
+      <Card className="mb-4 bg-background shadow-md overflow-hidden">
+        <CardContent className="pt-6">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={onSelectDate}
-            className="rounded-md"
+            className="rounded-md border-none"
             showOutsideDays={true}
             captionLayout="dropdown-buttons"
             fromYear={2020}
