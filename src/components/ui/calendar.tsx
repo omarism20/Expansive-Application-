@@ -9,6 +9,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   dailyTransactions?: Map<string, { income: number; expense: number; net: number }>;
+  dailyGoals?: Map<string, { count: number }>;
 };
 
 function Calendar({
@@ -16,6 +17,7 @@ function Calendar({
   classNames,
   showOutsideDays = true,
   dailyTransactions,
+  dailyGoals,
   ...props
 }: CalendarProps) {
   return (
@@ -62,6 +64,8 @@ function Calendar({
         Day: ({ date, ...dayProps }: DayProps) => {
           const dateStr = date.toISOString().split('T')[0];
           const dayData = dailyTransactions?.get(dateStr);
+          const goalData = dailyGoals?.get(dateStr);
+          const hasGoal = goalData && goalData.count > 0;
           
           return (
             <div className="relative flex flex-col items-center">
@@ -71,11 +75,15 @@ function Calendar({
                   buttonVariants({ variant: "ghost" }),
                   "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
                   dayProps["aria-selected"] ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground" : "",
+                  hasGoal ? "ring-1 ring-accent/50" : ""
                 )}
               >
                 <span className="flex items-center justify-center">
                   {date.getDate()}
                 </span>
+                {hasGoal && (
+                  <div className="absolute top-0 right-0 w-2 h-2 bg-accent rounded-full"></div>
+                )}
               </button>
               
               {dayData && (

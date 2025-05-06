@@ -2,7 +2,7 @@
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, CreditCard, Goal, DollarSign, BarChart, ChevronLeft } from "lucide-react";
+import { CalendarDays, Flag, Goal, DollarSign, BarChart, ChevronLeft } from "lucide-react";
 import { formatCurrency } from "@/utils/helpers";
 import { Badge } from "@/components/ui/badge";
 import { useMemo } from "react";
@@ -71,6 +71,25 @@ export function CalendarView({
     
     return map;
   }, [transactions]);
+  
+  // Prepare daily goals data to display on calendar
+  const dailyGoalsMap = useMemo(() => {
+    const map = new Map();
+    
+    goals.forEach(goal => {
+      if (goal.deadline) {
+        if (!map.has(goal.deadline)) {
+          map.set(goal.deadline, { count: 0 });
+        }
+        
+        const dayData = map.get(goal.deadline);
+        dayData.count += 1;
+        map.set(goal.deadline, dayData);
+      }
+    });
+    
+    return map;
+  }, [goals]);
 
   return (
     <div className="pb-24 space-y-6">
@@ -102,9 +121,44 @@ export function CalendarView({
               }
             }}
             dailyTransactions={dailyTransactionsMap}
+            dailyGoals={dailyGoalsMap}
           />
         </CardContent>
       </Card>
+      
+      {/* Display goals for selected date if any */}
+      {goalsForSelectedDate.length > 0 && (
+        <Card className="bg-card shadow-md">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Flag className="h-5 w-5" />
+              Goals Due on {formattedDate}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {goalsForSelectedDate.map((goal, index) => (
+              <div key={index} className="p-3 bg-secondary/10 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium text-lg">{goal.title}</h3>
+                  <span className="text-accent font-bold">{formatCurrency(goal.total)}</span>
+                </div>
+                
+                <div className="w-full bg-secondary h-3 rounded-full mt-2">
+                  <div 
+                    className="bg-accent h-3 rounded-full transition-all duration-500 ease-in-out"
+                    style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }}
+                  ></div>
+                </div>
+                
+                <div className="flex justify-between mt-2 text-sm">
+                  <span className="text-muted-foreground">Current: {formatCurrency(goal.current)}</span>
+                  <span className="text-muted-foreground">Remaining: {formatCurrency(goal.target - goal.current)}</span>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
       
       {/* Display transactions for selected date */}
       {selectedTransactions.length > 0 && (
@@ -145,42 +199,8 @@ export function CalendarView({
         </Card>
       )}
       
-      {/* Display goals for selected date if any */}
-      {goalsForSelectedDate.length > 0 && (
-        <Card className="bg-card shadow-md">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Goal className="h-5 w-5" />
-              Goals Due on {formattedDate}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-4">
-            {goalsForSelectedDate.map((goal, index) => (
-              <div key={index} className="space-y-3 mb-4 bg-secondary/10 p-3 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-medium text-lg">{goal.title}</h3>
-                  <span className="text-green-400 font-bold">{formatCurrency(goal.total)}</span>
-                </div>
-                
-                <div className="w-full bg-secondary h-3 rounded-full">
-                  <div 
-                    className="bg-green-600 h-3 rounded-full transition-all duration-500 ease-in-out"
-                    style={{ width: `${Math.min(100, (goal.current / goal.target) * 100)}%` }}
-                  ></div>
-                </div>
-                
-                <div className="flex justify-between mt-2 text-sm">
-                  <span className="text-muted-foreground">Current: {formatCurrency(goal.current)}</span>
-                  <span className="text-muted-foreground">Remaining: {formatCurrency(goal.target - goal.current)}</span>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-      
       {/* Show message if no transactions for selected date */}
-      {selectedTransactions.length === 0 && selectedDate && goalsForSelectedDate.length === 0 && (
+      {selectedTransactions.length === 0 && goalsForSelectedDate.length === 0 && selectedDate && (
         <Card className="bg-card shadow-md">
           <CardHeader>
             <CardTitle className="text-lg">{formattedDate}</CardTitle>

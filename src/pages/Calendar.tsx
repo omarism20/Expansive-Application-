@@ -7,10 +7,11 @@ import { Toaster } from "@/components/ui/toaster";
 export default function Calendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [transactions, setTransactions] = useState<any[]>([]);
-  const [calendarTransactions, setCalendarTransactions] = useState<any[]>([]);
   const [allTransactions, setAllTransactions] = useState<any[]>([]);
+  const [goals, setGoals] = useState<any[]>([]);
   
   useEffect(() => {
+    // Load transactions
     const storedTransactions = getTransactions();
     setTransactions(storedTransactions);
     
@@ -23,34 +24,8 @@ export default function Calendar() {
     }));
     
     setAllTransactions(formattedTransactions);
-    updateCalendarTransactions(storedTransactions);
-  }, []);
-  
-  // Update calendar transactions when selected date changes
-  useEffect(() => {
-    if (selectedDate) {
-      updateCalendarTransactions(transactions, selectedDate);
-    }
-  }, [selectedDate, transactions]);
-  
-  const updateCalendarTransactions = (allTransactions: any[], date: Date = new Date()) => {
-    const selectedDateStr = date.toISOString().split('T')[0];
     
-    const filtered = allTransactions.filter(tx => tx.date === selectedDateStr)
-      .map(tx => ({
-        date: tx.date,
-        category: tx.category,
-        amount: tx.amount,
-        type: tx.type
-      }));
-    
-    setCalendarTransactions(filtered);
-  };
-  
-  // Load saving goals for calendar
-  const [goals, setGoals] = useState([]);
-  
-  useEffect(() => {
+    // Load saving goals
     const storedGoals = getSavingGoals();
     const formattedGoals = storedGoals.map(goal => ({
       title: goal.name,
