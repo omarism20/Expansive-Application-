@@ -7,6 +7,7 @@ import { getCategories, saveCategories } from "@/utils/storage";
 import { toast } from "@/hooks/use-toast";
 import { DialogComponent } from "@/components/categories/CategoryForm";
 import { generateId } from "@/utils/helpers";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -19,7 +20,7 @@ export default function Categories() {
   
   const loadCategories = () => {
     const storedCategories = getCategories();
-    setCategories(storedCategories.length > 0 ? storedCategories : []);
+    setCategories(storedCategories);
   };
 
   const handleAddCategory = () => {
@@ -94,6 +95,10 @@ export default function Categories() {
       case 'shopping': return '🛒';
       case 'healthcare': return '🏥';
       case 'education': return '📚';
+      case 'salary': return '💵';
+      case 'investment': return '📈';
+      case 'gift': return '🎁';
+      case 'refund': return '💸';
       default: return '💰';
     }
   }
@@ -120,6 +125,8 @@ export default function Categories() {
           category={editCategory}
         />
       </main>
+      
+      <Toaster />
     </div>
   );
 }

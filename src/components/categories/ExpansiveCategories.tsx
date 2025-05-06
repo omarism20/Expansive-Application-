@@ -55,7 +55,8 @@ export function ExpansiveCategories({
                     className="w-10 h-10 rounded-full flex items-center justify-center mr-4"
                     style={{ backgroundColor: category.color }}
                   >
-                    {category.icon}
+                    {/* Display category icon, or a fallback if not available */}
+                    <span className="text-lg">{category.icon || '💰'}</span>
                   </div>
                   <span>{category.name}</span>
                 </div>
@@ -82,7 +83,7 @@ export function ExpansiveCategories({
                     className="w-10 h-10 rounded-full flex items-center justify-center mr-4"
                     style={{ backgroundColor: category.color }}
                   >
-                    {category.icon}
+                    <span className="text-lg">{category.icon || '💰'}</span>
                   </div>
                   <span>{category.name}</span>
                 </div>
