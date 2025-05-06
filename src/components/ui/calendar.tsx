@@ -26,29 +26,29 @@ function Calendar({
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
+        month: "space-y-4 w-full",
+        caption: "flex justify-center pt-1 relative items-center px-10",
+        caption_label: "text-base font-medium text-purple-700",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100"
+          "h-8 w-8 bg-transparent p-0 opacity-80 hover:opacity-100 border-purple-200"
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
         head_cell:
-          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+          "text-muted-foreground rounded-md w-10 font-medium text-[0.8rem]",
         row: "flex w-full mt-2",
-        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent/20 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+        cell: "relative h-12 w-10 text-center text-sm p-0 [&:has([aria-selected])]:bg-accent/20 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          "h-10 w-10 p-0 font-normal aria-selected:opacity-100"
         ),
         day_range_end: "day-range-end",
         day_selected:
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+          "bg-purple-500 text-white hover:bg-purple-600 hover:text-white focus:bg-purple-600 focus:text-white",
         day_today: "bg-accent/50 text-accent-foreground",
         day_outside:
           "day-outside text-muted-foreground opacity-50",
@@ -73,25 +73,26 @@ function Calendar({
                 {...dayProps} 
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
-                  dayProps["aria-selected"] ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground" : "",
-                  hasGoal ? "ring-1 ring-accent/50" : ""
+                  "h-10 w-10 p-0 font-normal aria-selected:opacity-100",
+                  dayProps["aria-selected"] ? "bg-purple-500 text-white hover:bg-purple-600 hover:text-white focus:bg-purple-600 focus:text-white" : "",
+                  hasGoal ? "ring-2 ring-orange-300" : ""
                 )}
               >
                 <span className="flex items-center justify-center">
                   {date.getDate()}
                 </span>
-                {hasGoal && (
-                  <div className="absolute top-0 right-0 w-2 h-2 bg-accent rounded-full"></div>
-                )}
               </button>
               
               {dayData && (
-                <span className="text-xs mt-1 absolute -bottom-3">
-                  {dayData.net > 0 ? 
-                    <span className="text-green-500 font-medium">+{Math.round(dayData.income/100)}</span> : 
-                    <span className="text-red-500 font-medium">-{Math.round(Math.abs(dayData.expense)/100)}</span>}
+                <span className={`text-xs mt-1 absolute -bottom-4 font-medium ${dayData.net >= 0 ? 'text-green-600' : 'text-red-500'}`}>
+                  {dayData.net >= 0 ? 
+                    <span>+{Math.abs(Math.round(dayData.income/100))}</span> : 
+                    <span>-{Math.abs(Math.round(dayData.expense/100))}</span>}
                 </span>
+              )}
+              
+              {hasGoal && (
+                <div className="absolute top-0 right-0 w-2 h-2 bg-orange-400 rounded-full"></div>
               )}
             </div>
           );

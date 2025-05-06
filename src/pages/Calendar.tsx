@@ -17,8 +17,10 @@ export default function Calendar() {
     
     // Transform all transactions for the calendar
     const formattedTransactions = storedTransactions.map(tx => ({
+      id: tx.id,
       date: tx.date,
       category: tx.category,
+      description: tx.description,
       amount: tx.amount,
       type: tx.type
     }));
@@ -42,7 +44,7 @@ export default function Calendar() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-white to-purple-50/30">
       <main className="pb-24">
         <CalendarView
           goals={goals}

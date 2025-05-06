@@ -21,7 +21,7 @@ interface CalendarViewProps {
   goals: GoalProgress[];
   selectedDate: Date | undefined;
   onSelectDate: (date: Date | undefined) => void;
-  transactions: { date: string; category: string; amount: number; type?: string }[];
+  transactions: { id?: string; date: string; category: string; amount: number; type?: string; description?: string }[];
 }
 
 export function CalendarView({
@@ -95,10 +95,10 @@ export function CalendarView({
   const hasDataForSelectedDate = selectedTransactions.length > 0 || goalsForSelectedDate.length > 0;
 
   return (
-    <div className="pb-24 space-y-6">
+    <div className="pb-24 space-y-6 px-4 pt-4">
       <CalendarHeader selectedDate={selectedDate} />
       
-      <Card className="mb-4 bg-background shadow-md overflow-hidden">
+      <Card className="mb-6 bg-white shadow-md overflow-hidden border border-purple-100">
         <CardContent className="pt-6">
           <Calendar
             mode="single"
@@ -109,14 +109,6 @@ export function CalendarView({
             captionLayout="dropdown-buttons"
             fromYear={2020}
             toYear={2030}
-            modifiers={{
-              marked: (date) => {
-                const dateStr = date.toISOString().split('T')[0];
-                const hasTransaction = transactions.some(tx => tx.date === dateStr);
-                const hasGoal = goals.some(goal => goal.deadline === dateStr);
-                return hasTransaction || hasGoal;
-              }
-            }}
             dailyTransactions={dailyTransactionsMap}
             dailyGoals={dailyGoalsMap}
           />
