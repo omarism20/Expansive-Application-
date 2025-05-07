@@ -78,7 +78,7 @@ function Calendar({
                   hasGoal ? "ring-2 ring-orange-300" : ""
                 )}
               >
-                <span className="flex items-center justify-center">
+                <span className="text-md font-medium">
                   {date.getDate()}
                 </span>
               </button>
